@@ -1,0 +1,12 @@
+﻿@model TaskManager.ViewModels.JoinTeamViewModel
+
+<h2>Join a team</h2>
+
+
+<form method="post" action="JoinTeam">
+    <div class="form-group">
+        @Html.DropDownListFor(m => m.Team, Model.Teams, new { @class = "form-control" })
+    </div>
+    <input type="submit" value="Select" />
+</form>
+   

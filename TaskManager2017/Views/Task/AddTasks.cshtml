@@ -1,0 +1,22 @@
+﻿@model TaskManager.ViewModels.AddTasksViewModel
+
+
+
+<h1>Add tasks to your project</h1>
+
+@using (Html.BeginForm("AddTasks", "Task", FormMethod.Post))
+{
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description"></textarea>
+    </div>
+    
+    <br />
+    <input type="submit" name="addNewTask" value="Add new task" />
+    <input type="submit" name="finish" value="Finish" />
+}

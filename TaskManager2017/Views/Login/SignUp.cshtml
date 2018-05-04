@@ -1,0 +1,44 @@
+﻿@model TaskManager.ViewModels.SignUpTaskViewModel
+@{
+}
+
+<h2>Sign Up!</h2>
+
+<form method="post" action="SignUp">
+    <div class="form-group">
+        <label asp-for="Username"></label>
+        <input class="form-control" asp-for="Username" />
+        <span style="color:red" asp-validation-for="Username"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input class="form-control" asp-for="FirstName" />
+        <span style="color:red" asp-validation-for="FirstName"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input class="form-control" asp-for="LastName" />
+        <span style="color:red" asp-validation-for="LastName"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input class="form-control" asp-for="Email" />
+        <span style="color:red" asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input class="form-control" asp-for="Password" type="password"/>
+        <span style="color:red" asp-validation-for="Password"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Verify"></label>
+        <input class="form-control" asp-for="Verify" type="password" />
+        <span style="color:red" asp-validation-for="Verify"></span>
+    </div>
+    
+
+
+    <input type="submit" value="SignUp!" />
+
+
+</form>

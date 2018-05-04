@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TaskManager2017.Models;
+
 
 namespace TaskManager2017
 {
@@ -21,7 +24,11 @@ namespace TaskManager2017
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddMvc();
+
+            services.AddDbContext<TaskManager2017Context>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("TaskManager2017Context")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,7 +50,7 @@ namespace TaskManager2017
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=SignIn}/{id?}");
             });
         }
     }

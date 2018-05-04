@@ -1,0 +1,12 @@
+﻿@model TaskManager.ViewModels.SearchForUserViewModel
+
+<h2>Search for user by Username</h2>
+
+<form method="post" action="SearchForUser">
+    <div class="form-group">
+        <label asp-for="Username"></label>
+        <input class="form-control" asp-for="Username" />
+        <span style="color:red" asp-validation-for="Username"></span>
+    </div>
+    <input type="submit" value="Search" />
+</form>

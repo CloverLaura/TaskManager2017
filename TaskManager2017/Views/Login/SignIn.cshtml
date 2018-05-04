@@ -1,0 +1,23 @@
+﻿@model TaskManager.ViewModels.SignInViewModel
+@{
+}
+
+<a asp-area="" asp-controller="Users" asp-action="Create">Register</a>
+<a asp-area="" asp-controller="Users" asp-action="Index">View Users</a>
+
+<h1>Login</h1>
+
+<form method="post" >
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input class="form-group" asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input class="form-group"asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <input type="submit" value="Login" />
+</form>

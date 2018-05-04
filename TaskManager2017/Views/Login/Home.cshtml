@@ -1,0 +1,49 @@
+﻿@model TaskManager.Models.User
+
+@{
+}
+
+<h2>Your Profile</h2>
+<br />
+<br />
+
+@if (String.IsNullOrEmpty(Model.FirstName))
+{
+    <h1>No user to display</h1>
+
+}
+else
+{
+    <h1>Welcome @Model.FirstName @Model.LastName</h1>
+    <p>@Model.Email</p>
+    <p>@Model.Password</p>
+    <p>@Model.UserID</p>
+
+
+    @foreach (var team in Model.UserTeams)
+    {
+        <p>@team.Name</p>
+
+    }
+    @foreach (var project in Model.UserProjects)
+    {
+        <p>@project.Name</p>
+        <p>@project.Description</p>
+        <p>@project.ProjectID</p>
+
+    }
+    @foreach(var task in Model.UserTasks)
+    {
+        <p>Task:</p>
+        <br />
+        <p>Name:@task.Name</p>
+        <p>Description: @task.Description</p>
+        <p>Iscompleted: @task.Completed</p>
+        <p>IsTaken: @task.IsTaken</p>
+        <p>TaskID: @task.TaskID</p>
+        
+        
+
+    }
+
+}

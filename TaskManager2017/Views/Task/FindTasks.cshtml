@@ -1,0 +1,33 @@
+﻿@model TaskManager.ViewModels.FindTasksViewModel
+
+@if (Model.User.UserTeams.Count() != 0)
+{
+    <br />
+    <h2>If you want to view your teams projects, select the team here</h2>
+    <br />
+    @using (Html.BeginForm("TeamProjects", "Project", FormMethod.Post))
+    {
+    <form>
+        <div class="form-group">
+            @Html.DropDownListFor(m => m.TeamName, Model.Teams, new { @class = "form-control" })
+        </div>
+        <input type="submit" value="Select" />
+    </form>
+    }
+}
+<h1>All Projects</h1>
+
+@foreach(var project in Model.AllProjects)
+{
+    <h1>Title: <a asp-controller="Task" asp-action="FindTasks_ViewTasks" asp-route-id="@project.ProjectID">@project.Name</a></h1>
+    <h4>Created by: @project.CreatedBy.ToString()</h4>
+    <h2> Tasks: @project.Tasks.Count</h2>
+
+
+}
+
+@if(Model.AllProjects.Count == 0)
+{
+    <h1>No projects to display</h1>
+
+}

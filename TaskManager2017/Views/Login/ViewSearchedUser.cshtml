@@ -1,0 +1,50 @@
+﻿@model TaskManager.Models.User
+
+
+<h9>Profile</h9>
+<br />
+<br />
+<h5>User:@Model.Username</h5>
+
+<h4><p>Name: @Model.FirstName @Model.LastName<br />Email: @Model.Email</p></h4>
+<br />
+@if (Model.LoggedOn)
+{
+    <h4><p style="color:limegreen">Online</p></h4>
+
+}
+else
+{
+    <h4><p style="color:red">Offline</p></h4>
+
+}
+
+@if (Model.UserTeams.Count() != 0)
+{
+
+    <h5>Users Teams</h5>
+    foreach(var team in Model.UserTeams)
+    {
+        <p>@team.Name</p><br />
+        <p>@team.Description</p>
+
+    }
+
+}
+
+
+<h5>Users Projects</h5>
+<br />
+@foreach(var project in Model.UserProjects)
+{
+    <h4><p>-@project.Name</p></h4>
+    <br/>
+    if (!string.IsNullOrEmpty(project.Description))
+    {
+        <p><h2>About: @project.Description</h2></p>
+
+    }
+
+}
+
+

@@ -1,0 +1,13 @@
+﻿@model TaskManager.ViewModels.AddTeamViewModel
+
+<h1>Create a new team</h1><br />
+
+<h4>When you create a new team and attach it to a project, only the people on your new team <br />
+    can see your project and accept tasks for it</h4>
+
+@using (Html.BeginForm("AddTeam", "Team", FormMethod.Post))
+{
+    @Html.EditorForModel()
+    <input type="submit" value="Submit" name="submit" />
+
+}

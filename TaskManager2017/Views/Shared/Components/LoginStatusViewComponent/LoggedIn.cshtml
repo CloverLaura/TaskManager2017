@@ -1,0 +1,27 @@
+﻿@model TaskManager.Models.User
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="Login" asp-action="Home">Your Profile</a></li>
+                <li><a asp-controller="Project" asp-action="AddProject">Add a new project</a></li>
+                <li><a asp-controller="Team" asp-action="AddTeam">Add a new team</a></li>
+                <li><a asp-controller="Team" asp-action="JoinTeam">Join a team</a></li>
+                <li><a asp-controller="Project" asp-action="ViewProjects">View your projects</a></li>
+                <li><a asp-controller="Task" asp-action="ViewTasks">View your tasks</a></li>
+                <li><a asp-controller="Task" asp-action="FindTasks">Find tasks</a></li>
+                <li><a asp-controller="Login" asp-action="SearchForUser">Search Users</a></li>
+                <li><a asp-area="" asp-controller="Login" asp-action="SignOut">Sign Out</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

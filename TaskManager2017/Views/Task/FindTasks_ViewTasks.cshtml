@@ -1,0 +1,39 @@
+﻿@model TaskManager.ViewModels.FindTasks_ViewTasksViewModel
+
+<h1>Tasks for @Model.Project.Name</h1>
+
+@foreach(var task in Model.Project.Tasks)
+{
+    <h1>@task.Name</h1>
+    <h2>@task.Description</h2>
+
+    @if(task.Completed == false)
+    {
+        <h2>Completed: No </h2>
+        
+    }
+    else
+    {
+        <h2>Completed: Yes</h2>
+
+    }
+
+    @if(task.IsTaken == false)
+    {
+        <h2>Taken: No</h2>
+        <br />
+
+        <form method="post" action="FindTasks_ViewTasks">
+            <h2>Would you like to accept this task?</h2>
+            @Html.Hidden("TaskID", task.TaskID)
+            <input type="submit" value="Accept" />
+        </form>
+
+    }
+    else
+    {
+        <h2>Taken: Yes</h2>
+
+    }
+    
+}
