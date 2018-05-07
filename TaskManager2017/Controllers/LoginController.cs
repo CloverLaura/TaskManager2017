@@ -152,8 +152,9 @@ namespace TaskManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserData userData = new UserData();
-                List<User> users = userData.AllUsersToList();
+                //UserData userData = new UserData();
+                List<User> users = _context.User.ToList();
+                //List<User> users = userData.AllUsersToList();
                 foreach (User u in users)
                 {
                     if (u.Username == searchForUserViewModel.Username)
@@ -170,8 +171,9 @@ namespace TaskManager.Controllers
 
         public IActionResult ViewSearchedUser(int id)
         {
-            UserData userData = new UserData();
-            User user = userData.GetById(id);
+            //UserData userData = new UserData();
+            //User user = userData.GetById(id);
+            var user = _context.User.FirstOrDefault(u => u.UserID == id);
             return View(user);
         }
 
