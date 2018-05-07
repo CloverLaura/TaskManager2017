@@ -1,41 +1,44 @@
-﻿@model TaskManager.Models.User
+﻿@model TaskManager2017.ViewModels.ViewProjectsViewModel
 
 <h1>Your projects</h1>
 
-@foreach (var project in Model.UserProjects)
+@foreach (var project in Model.userProjects)
 {
     <h3>@project.Name</h3> <br />
     <h2>Tasks:</h2> <br />
 
-    @foreach (var task in project.Tasks)
+    @foreach (var task in Model.allTasks)
     {
-        <h4>@task.Name</h4>
-        if (task.IsTaken)
+        if (task.ProjectID == project.ProjectID)
         {
-            <h4>Taken: Yes</h4>
+            <h4>@task.Name</h4>
+            if (task.IsTaken)
+            {
+             <h4>Taken: Yes</h4>
             <h4>Taken by: @task.TakenBy.ToString()</h4>
 
-        }
-        else
-        {
+            }
+            else
+            {
             <h4>Taken: No</h4>
 
-        }
+            }
 
-        if (task.Completed)
-        {
+            if (task.Completed)
+            {
             <h4>Completed: Yes</h4>
 
-        }
-        else
-        {
+            }
+            else
+            {
             <h4>Completed: No</h4>
 
+            }
+
+        <br />
+        <br />
+        <br />
+            }
         }
 
-        <br />
-        <br />
-        <br />
     }
-
-}

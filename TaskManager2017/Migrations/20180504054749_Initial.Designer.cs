@@ -58,6 +58,8 @@ namespace TaskManager2017.Migrations
 
                     b.Property<string>("TakenBy");
 
+                    b.Property<string>("CreatedBy");
+
                     b.Property<int?>("UserID");
 
                     b.HasKey("TaskID");

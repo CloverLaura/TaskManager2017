@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskManager.Models;
 using TaskManager.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TaskManager2017.Models;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,7 +14,14 @@ namespace TaskManager.Controllers
 {
     public class TaskController : Controller
     {
-        
+
+        private readonly TaskManager2017Context _context;
+
+        public TaskController(TaskManager2017Context context)
+        {
+            _context = context;
+        }
+
         public IActionResult AddTasks(int projectID)
         {
             ProjectData projectData = new ProjectData();
@@ -38,7 +46,7 @@ namespace TaskManager.Controllers
                     {
                         Name = obj.Name,
                         Description = obj.Description,
-                        Project = project
+                        //Project = project
                     };
 
                     taskData.AddTask(project, task);
@@ -55,7 +63,7 @@ namespace TaskManager.Controllers
                     Models.Task task = new Models.Task();
                     task.Name = obj.Name;
                     task.Description = obj.Description;
-                    task.Project = project;
+                    //task.Project = project;
                     taskData.AddTask(project, task);
                     taskData.Add(task);
                     return RedirectToAction("AddTasks", "Task", new { projectID = projectID });
@@ -68,7 +76,7 @@ namespace TaskManager.Controllers
                     {
                         Name = obj.Name,
                         Description = obj.Description,
-                        Project = project
+                        //Project = project
                     };
 
                     taskData.AddTask(project, task);
@@ -150,13 +158,16 @@ namespace TaskManager.Controllers
         [HttpGet]
         public IActionResult ViewTasks()
         {
-            UserData userData = new UserData();
-            ProjectData projectData = new ProjectData();
+            /*UserData userData = new UserData();
+            ProjectData projectData = new ProjectData();*/
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
-            User user = userData.GetById(userID);
+            //User user = userData.GetById(userID);
+            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+            List<Models.Task> tasks = _context.Task.ToList();
             ViewTasksViewModel viewTasksViewModel = new ViewTasksViewModel();
             viewTasksViewModel.User = user;
+            viewTasksViewModel.Tasks = tasks;
 
             return View(viewTasksViewModel);
         }

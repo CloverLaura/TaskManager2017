@@ -20,42 +20,54 @@ namespace TaskManager.Controllers
 
     public class LoginController : Controller
     {
-        
+
+        private readonly TaskManager2017Context _context;
+
+        public LoginController(TaskManager2017Context context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult SignIn()
         {
+            string cookie = HttpContext.Request.Cookies["userCookie"];
+            int userID = Convert.ToInt32(cookie);
+            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+            if (user != null)
+            {
+                user.LoggedOn = false;
+                _context.SaveChangesAsync();
+            }
+
+            
             return View();
         }
 
 
         
-        public IActionResult SignIn(SignInViewModel signInViewModel)
+        public async Task<IActionResult> SignIn(SignInViewModel signInViewModel)
         {
             if (ModelState.IsValid)
             {
-                UserData userData = new UserData();
-                List<User> users = userData.AllUsersToList();
-                foreach (User u in users)
+                var userE = await _context.User.FirstOrDefaultAsync(m => m.Email == signInViewModel.Email);
+                if(userE == null)
                 {
-                    if (signInViewModel.Email.ToString() == u.Email & signInViewModel.Password == u.Password)
+                    ModelState.AddModelError("Email", "Email is not registered");
+                }
+                else
+                {
+                    if( userE.Password != signInViewModel.Password)
                     {
-                        Response.Cookies.Append("userCookie", u.UserID.ToString());
+                        ModelState.AddModelError("Password", "Incorrect password");
+                    }
+                    else
+                    {
+                        Response.Cookies.Append("userCookie", userE.UserID.ToString());
                         return RedirectToAction("Home");
                     }
-                    if(signInViewModel.Email.ToString() == u.Email & signInViewModel.Password != u.Password)
-                    {
-                        ModelState.AddModelError("Password","Incorrect Password");
-                        return View(signInViewModel);
-                    }
-                    if (signInViewModel.Email.ToString() != u.Email)
-                    {
-                        ModelState.AddModelError("Email", "Email is not registered");
-                    }
-
+                    return View(signInViewModel);
                 }
-                return View(signInViewModel);
-                
             }
             return View(signInViewModel);
         }
@@ -120,11 +132,12 @@ namespace TaskManager.Controllers
 
         public IActionResult Home()
         {
-            UserData userData = new UserData();
+            //UserData userData = new UserData();
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
-            User user = userData.GetById(userID);
+            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
             user.LoggedOn = true;
+            _context.SaveChangesAsync();
 
             return View(user);
         }

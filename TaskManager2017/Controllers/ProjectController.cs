@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using TaskManager.ViewModels;
 using TaskManager.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TaskManager2017.Models;
+using TaskManager2017.ViewModels;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,6 +16,13 @@ namespace TaskManager.Controllers
     public class ProjectController : Controller
     {
         public IEnumerable<SelectListItem> GetSelectListItems { get; set; }
+
+        private readonly TaskManager2017Context _context;
+
+        public ProjectController(TaskManager2017Context context)
+        {
+            _context = context;
+        }
 
         // GET: /<controller>/
         public IActionResult AddProject()
@@ -64,12 +73,34 @@ namespace TaskManager.Controllers
 
         public IActionResult ViewProjects()
         {
-            UserData userData = new UserData();
+            ViewProjectsViewModel viewProjectsViewModel = new ViewProjectsViewModel();
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
-            User user = userData.GetById(userID);
+            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
 
-            return View(user);
+            string cookieP = HttpContext.Request.Cookies["projectCookie"];
+            int projectID = Convert.ToInt32(cookie);
+            var project = _context.Project.FirstOrDefault(u => u.ProjectID == projectID);
+
+            List<Project> projects = _context.Project.ToList();
+            List<Models.Task> tasks = _context.Task.ToList();
+
+            /*IQueryable<Project> custQuery =
+            from p in _context.Project
+            where p.CreatedBy == user.Username
+            select p;*/
+            List<Project> userProjects = new List<Project>();
+            foreach(Project p in projects)
+            {
+                if (p.CreatedBy == user.Username)
+                {
+                    userProjects.Add(p);
+                }
+            }
+
+            viewProjectsViewModel.userProjects = userProjects;
+            viewProjectsViewModel.allTasks = tasks;
+            return View(viewProjectsViewModel);
         }
 
         public IActionResult TeamProjects(FindTasksViewModel findTasksViewModel)

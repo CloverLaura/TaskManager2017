@@ -20,5 +20,19 @@ namespace TaskManager2017.Models
         }*/
 
         public DbSet<TaskManager.Models.User> User { get; set; }
+
+        /*public TaskManager2017Context()
+        {
+
+        }*/
+
+        public DbSet<TaskManager.Models.Project> Project { get; set; }
+
+        /*public TaskManager2017Context()
+        {
+
+        }*/
+
+        public DbSet<TaskManager.Models.Task> Task { get; set; }
     }
 }

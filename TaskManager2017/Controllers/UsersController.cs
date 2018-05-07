@@ -54,13 +54,43 @@ namespace TaskManager2017.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,FirstName,LastName,Password,Email,UserID,LoggedOn")] User user)
+        public async Task<IActionResult> Create([Bind("Username,FirstName,LastName,Password,Email,UserID,LoggedOn")] User user, string confirmPassword)
         {
-            if (ModelState.IsValid)
+            /*var userC = from m in _context.User
+                        select m;
+            userC = userC.Where(s => s.Username == user.Username);
+            await userC.LoadAsync();*/
+            var userC = _context.User.FirstOrDefault(u => u.Username == user.Username);
+            if (userC != null)
+            {
+                ModelState.AddModelError("Username", "Useranme already exsists");
+                return View(user);
+            }
+            /*var userE =
+                _context.User
+                .Where(r => r.Email == user.Email);
+            userC = userC.Where(s => s.Email == user.Email);
+            await userC.LoadAsync();*/
+            var userE = _context.User.FirstOrDefault(u => u.Email == user.Email);
+            if (userE != null)
+            {
+                ModelState.AddModelError("Email", "Email already registered");
+                return View(user);
+            }
+
+            if (ModelState.IsValid & confirmPassword == user.Password)
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Response.Cookies.Append("userCookie", user.UserID.ToString());
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Home", "Login");
+            }
+            
+            
+            if(confirmPassword != user.Password)
+            {
+                ModelState.AddModelError("Password", "Passwords do not match");
             }
             return View(user);
         }

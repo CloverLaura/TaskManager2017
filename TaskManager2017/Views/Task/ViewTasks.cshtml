@@ -6,26 +6,30 @@
 <br />
 <br />
 <br />
-@if(Model.User.UserTasks.Count() == 0)
+@if(Model.Tasks.Count == 0)
 {
     <h4>No tasks to display</h4>
 
 }
 
-@foreach(var task in Model.User.UserTasks)
+@foreach(var task in Model.Tasks)
 {
-    <h4>Task: @task.Name</h4>
-    <h4>For project: @task.Project.Name.ToString()</h4>
-    <h5>Created by: @task.Project.CreatedBy.ToString()</h5>
+    if (task.TakenBy == Model.User.Username)
+    {
 
-    <br />
-    <h6>@task.Description</h6>
-    <br />
-    <p>Have you completed this task?</p>
-    <form method="post" action="ViewTasks">
+        <h4>Task: @task.Name</h4>
+        <h4>For project: @task.Name.ToString()</h4>
+        <h5>Created by: @task.CreatedBy</h5>
+
+        <br />
+        <h6>@task.Description</h6>
+        <br />
+        <p>Have you completed this task?</p>
+        <form method="post" action="ViewTasks">
         <input type="hidden" value="@task.TaskID" name="TaskID"/>
-    <input type="submit" value="Completed" id="@task.TaskID" />
-    </form>
+        <input type="submit" value="Completed" id="@task.TaskID" />
+        </form>
+    }
 
 }
 

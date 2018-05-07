@@ -11,11 +11,15 @@ namespace TaskManager.ViewModels
 
         public User User { get; set; }
 
+        public List<Models.Task> Tasks { get; set; }
+
         public int TaskID { get; set; }
 
-        public Project Project { get; set; }
+        /*public Project Project { get; set; }
 
-        public String CreatedBy { get; set; }
+        public String CreatedBy { get; set; }*/
+
+
 
 
        
