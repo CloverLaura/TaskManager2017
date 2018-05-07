@@ -17,9 +17,15 @@ namespace TaskManager.ViewModels
 
         public List<Project> AllProjects { get; set; }
 
+        public List<Models.Task> AllTasks { get; set; }
+
+        public int Counter { get; set; }
+
         public FindTasksViewModel()
         {
             AllProjects = new List<Project>();
+            AllTasks = new List<Models.Task>();
+            Counter = 0;
         }
     }
 

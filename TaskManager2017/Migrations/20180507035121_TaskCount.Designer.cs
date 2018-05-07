@@ -11,9 +11,10 @@ using TaskManager2017.Models;
 namespace TaskManager2017.Migrations
 {
     [DbContext(typeof(TaskManager2017Context))]
-    partial class TaskManager2017ContextModelSnapshot : ModelSnapshot
+    [Migration("20180507035121_TaskCount")]
+    partial class TaskCount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

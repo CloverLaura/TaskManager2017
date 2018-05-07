@@ -12,5 +12,12 @@ namespace TaskManager.ViewModels
 
         public int TaskID { get; set; }
 
+        public List<Models.Task> Tasks { get; set; }
+
+        public FindTasks_ViewTasksViewModel()
+        {
+            Tasks = new List<Models.Task>();
+        }
+
     }
 }

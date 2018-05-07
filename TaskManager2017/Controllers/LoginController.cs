@@ -179,11 +179,13 @@ namespace TaskManager.Controllers
 
         public IActionResult SignOut()
         {
-            UserData userData = new UserData();
+            //UserData userData = new UserData();
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
-            User user = userData.GetById(userID);
+            //User user = userData.GetById(userID);
+            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
             user.LoggedOn = false;
+            _context.SaveChangesAsync();
 
             return RedirectToAction("SignIn", "Login");
         }

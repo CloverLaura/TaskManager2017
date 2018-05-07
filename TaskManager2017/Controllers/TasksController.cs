@@ -67,6 +67,7 @@ namespace TaskManager2017.Controllers
                 task.TakenBy = "";
                 task.CreatedBy = project.CreatedBy;
                 task.ProjectID = project.ProjectID;
+                project.TaskCount++;
                 _context.Add(task);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ViewProjects","Project");
