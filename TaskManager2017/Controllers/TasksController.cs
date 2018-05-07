@@ -54,23 +54,41 @@ namespace TaskManager2017.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TaskID,Name,Description,ProjectID,Completed,IsTaken,TakenBy")] TaskManager.Models.Task task)
+        public async Task<IActionResult> Create([Bind("TaskID,Name,Description,ProjectID,Completed,IsTaken,TakenBy")] TaskManager.Models.Task task, string addNewTask, string finish)
         {
             if (ModelState.IsValid)
             {
+
                 string cookie = HttpContext.Request.Cookies["projectCookie"];
                 int projectID = Convert.ToInt32(cookie);
                 var project = _context.Project.FirstOrDefault(u => u.ProjectID == projectID);
+                if (ModelState.IsValid & string.IsNullOrEmpty(finish))
+                {
+                    task.Completed = false;
+                    task.IsTaken = false;
+                    task.TakenBy = "";
+                    task.CreatedBy = project.CreatedBy;
+                    task.ProjectID = project.ProjectID;
+                    project.TaskCount++;
+                    _context.Add(task);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Create");
 
-                task.Completed = false;
-                task.IsTaken = false;
-                task.TakenBy = "";
-                task.CreatedBy = project.CreatedBy;
-                task.ProjectID = project.ProjectID;
-                project.TaskCount++;
-                _context.Add(task);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("ViewProjects","Project");
+
+                }
+                if(ModelState.IsValid & string.IsNullOrEmpty(addNewTask))
+                {
+                    task.Completed = false;
+                    task.IsTaken = false;
+                    task.TakenBy = "";
+                    task.CreatedBy = project.CreatedBy;
+                    task.ProjectID = project.ProjectID;
+                    project.TaskCount++;
+                    _context.Add(task);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("ViewProjects", "Project");
+                }
+                
             }
             return View(task);
         }

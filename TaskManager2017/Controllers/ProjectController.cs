@@ -58,7 +58,7 @@ namespace TaskManager.Controllers
                 {
                     foreach (Team team in user.UserTeams)
                     {
-                        if (user.UserID == team.CreatedBy)
+                        if (user.Username == team.CreatedBy)
                         {
                             teamData.AddProjectToTeam(team, project);
                         }

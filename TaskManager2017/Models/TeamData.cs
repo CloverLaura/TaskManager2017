@@ -41,14 +41,14 @@ namespace TaskManager.Models
             {
                 Name = "Night Stalkers",
                 Description = "Stalks the neighborhood for innocent voters.",
-                CreatedBy = 33333
+                CreatedBy = ""
             });
 
             HardTeams.Add(new Team
             {
                 Name = "Money Stealers",
                 Description = "Collects money from unsuspecting do-gooders.",
-                CreatedBy = 33333
+                CreatedBy = ""
             });
         }
     }

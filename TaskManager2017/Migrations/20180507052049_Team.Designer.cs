@@ -11,9 +11,10 @@ using TaskManager2017.Models;
 namespace TaskManager2017.Migrations
 {
     [DbContext(typeof(TaskManager2017Context))]
-    partial class TaskManager2017ContextModelSnapshot : ModelSnapshot
+    [Migration("20180507052049_Team")]
+    partial class Team
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +78,7 @@ namespace TaskManager2017.Migrations
                     b.Property<int>("TeamID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<int>("CreatedBy");
 
                     b.Property<string>("Description");
 
@@ -117,20 +118,6 @@ namespace TaskManager2017.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("User");
-                });
-
-            modelBuilder.Entity("TaskManager2017.Models.UserTeam", b =>
-                {
-                    b.Property<int>("UserTeamID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Team");
-
-                    b.Property<string>("User");
-
-                    b.HasKey("UserTeamID");
-
-                    b.ToTable("UserTeam");
                 });
 
             modelBuilder.Entity("TaskManager.Models.Project", b =>

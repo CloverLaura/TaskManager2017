@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Models;
+using TaskManager2017.Models;
 
 namespace TaskManager2017.Models
 {
@@ -34,5 +35,19 @@ namespace TaskManager2017.Models
         }*/
 
         public DbSet<TaskManager.Models.Task> Task { get; set; }
+
+        /*public TaskManager2017Context()
+        {
+
+        }*/
+
+        public DbSet<TaskManager.Models.Team> Team { get; set; }
+
+        /*public TaskManager2017Context()
+        {
+
+        }*/
+
+        public DbSet<TaskManager2017.Models.UserTeam> UserTeam { get; set; }
     }
 }
