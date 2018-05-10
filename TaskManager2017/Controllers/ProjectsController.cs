@@ -56,7 +56,8 @@ namespace TaskManager2017.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProjectID,Name,Description,CreatedBy")] Project project)
         {
-            if (ModelState.IsValid)
+            var project_ = _context.Project.FirstOrDefault(u => u.Name == project.Name);
+            if (ModelState.IsValid & project_ == null)
             {
                 string cookie = HttpContext.Request.Cookies["userCookie"];
                 int userID = Convert.ToInt32(cookie);
@@ -66,6 +67,10 @@ namespace TaskManager2017.Controllers
                 await _context.SaveChangesAsync();
                 Response.Cookies.Append("projectCookie", project.ProjectID.ToString());
                 return RedirectToAction("Create","Tasks");
+            }
+            if(project_ != null)
+            {
+                ModelState.AddModelError("Name", "Your project name has already been taken");
             }
             return View(project);
         }

@@ -57,7 +57,8 @@ namespace TaskManager2017.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TeamID,Name,Description,CreatedBy")] Team team)
         {
-            if (ModelState.IsValid)
+            var team_ = _context.Team.FirstOrDefault(u => u.Name == team.Name);
+            if (ModelState.IsValid & team_ == null)
             {
                 string cookie = HttpContext.Request.Cookies["userCookie"];
                 int userID = Convert.ToInt32(cookie);
@@ -77,6 +78,10 @@ namespace TaskManager2017.Controllers
                 return RedirectToAction("Home", "Login");
                 //await _context.SaveChangesAsync();
                 //return RedirectToAction("Create", "UserTeams", new { teamName = team.Name });
+            }
+            if(team_ != null)
+            {
+                ModelState.AddModelError("Name", "Your team name is already being used");
             }
             return View(team);
         }
