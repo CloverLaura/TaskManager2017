@@ -24,7 +24,7 @@ namespace TaskManager.Controllers
             _context = context;
         }
 
-        // GET: /<controller>/
+        /*// GET: /<controller>/
         public IActionResult AddProject()
         {
             return View();
@@ -69,52 +69,11 @@ namespace TaskManager.Controllers
             return View(addViewModel);
 
 
-        }
+        }*/
 
-        public IActionResult ViewProjects()
-        {
-            ViewProjectsViewModel viewProjectsViewModel = new ViewProjectsViewModel();
-            string cookie = HttpContext.Request.Cookies["userCookie"];
-            int userID = Convert.ToInt32(cookie);
-            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+        
 
-            string cookieP = HttpContext.Request.Cookies["projectCookie"];
-            int projectID = Convert.ToInt32(cookie);
-            var project = _context.Project.FirstOrDefault(u => u.ProjectID == projectID);
-
-            List<Project> projects = _context.Project.ToList();
-            List<Models.Task> tasks = _context.Task.ToList();
-
-            /*IQueryable<Project> custQuery =
-            from p in _context.Project
-            where p.CreatedBy == user.Username
-            select p;*/
-            List<Project> userProjects = new List<Project>();
-            foreach(Project p in projects)
-            {
-                if (p.CreatedBy == user.Username)
-                {
-                    userProjects.Add(p);
-                }
-            }
-
-            viewProjectsViewModel.userProjects = userProjects;
-            viewProjectsViewModel.allTasks = tasks;
-            return View(viewProjectsViewModel);
-        }
-
-        public IActionResult TeamProjects(FindTasksViewModel findTasksViewModel)
-        {
-            TeamProjectsViewModel teamProjectsViewModel = new TeamProjectsViewModel();
-            TeamData teamData = new TeamData();
-            Team selectedTeam = teamData.FindByName(findTasksViewModel.TeamName);
-            teamProjectsViewModel.Team = selectedTeam;
-            foreach(Project project in selectedTeam.TeamProjects)
-            {
-                teamProjectsViewModel.AllProjects.Add(project);
-            }
-            return View(teamProjectsViewModel);
-        }
+        
 
 
     }

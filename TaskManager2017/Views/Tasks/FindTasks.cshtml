@@ -5,7 +5,7 @@
     <br />
     <h2>If you want to view your teams projects, select the team here</h2>
     <br />
-    @using (Html.BeginForm("TeamProjects", "Project", FormMethod.Post))
+    @using (Html.BeginForm("TeamProjects", "Projects", FormMethod.Post))
     {
         <form>
             <div class="form-group">
@@ -19,7 +19,7 @@
 
 @foreach (var project in Model.AllProjects)
 {
-    <h1>Title: <a asp-controller="Task" asp-action="FindTasks_ViewTasks" asp-route-id="@project.ProjectID">@project.Name</a></h1>
+    <h1>Title: <a asp-controller="Tasks" asp-action="FindTasks_ViewTasks" asp-route-id="@project.ProjectID">@project.Name</a></h1>
     <h4>Created by: @project.CreatedBy.ToString()</h4>
     <h2> Tasks: @project.TaskCount.ToString()</h2>
 

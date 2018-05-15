@@ -64,7 +64,7 @@ namespace TaskManager.Controllers
                     else
                     {
                         Response.Cookies.Append("userCookie", userE.UserID.ToString());
-                        return RedirectToAction("Home");
+                        return RedirectToAction("Home", "Users");
                     }
                     return View(signInViewModel);
                 }
@@ -75,7 +75,7 @@ namespace TaskManager.Controllers
            
         
 
-        [HttpGet]
+        /*[HttpGet]
         public IActionResult SignUp()
         {
             SignUpTaskViewModel signUpTaskViewModel = new SignUpTaskViewModel();
@@ -124,58 +124,15 @@ namespace TaskManager.Controllers
             }
             return View(signUpTaskViewModel);
             
-        }
+        }*/
 
         
 
        
 
-        public IActionResult Home()
-        {
-            //UserData userData = new UserData();
-            string cookie = HttpContext.Request.Cookies["userCookie"];
-            int userID = Convert.ToInt32(cookie);
-            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
-            user.LoggedOn = true;
-            _context.SaveChangesAsync();
+        
 
-            return View(user);
-        }
-
-        public IActionResult SearchForUser()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult SearchForUser(SearchForUserViewModel searchForUserViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                //UserData userData = new UserData();
-                List<User> users = _context.User.ToList();
-                //List<User> users = userData.AllUsersToList();
-                foreach (User u in users)
-                {
-                    if (u.Username == searchForUserViewModel.Username)
-                    {
-                        return RedirectToAction("ViewSearchedUser", new { id = u.UserID });
-                    }
-                }
-                ModelState.TryAddModelError("Username", "Username not found");
-                return View(searchForUserViewModel);
-            }
-            ModelState.AddModelError("Username", "You must enter a Username");
-            return View(searchForUserViewModel);
-        }
-
-        public IActionResult ViewSearchedUser(int id)
-        {
-            //UserData userData = new UserData();
-            //User user = userData.GetById(id);
-            var user = _context.User.FirstOrDefault(u => u.UserID == id);
-            return View(user);
-        }
+        
 
         public IActionResult SignOut()
         {

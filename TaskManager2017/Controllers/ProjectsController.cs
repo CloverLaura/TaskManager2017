@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Models;
+using TaskManager.ViewModels;
 using TaskManager2017.Models;
+using TaskManager2017.ViewModels;
 
 namespace TaskManager2017.Controllers
 {
@@ -19,39 +21,13 @@ namespace TaskManager2017.Controllers
             _context = context;
         }
 
-        // GET: Projects
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Project.ToListAsync());
-        }
-
-        // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Project
-                .SingleOrDefaultAsync(m => m.ProjectID == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            return View(project);
-        }
-
-        // GET: Projects/Create
+        
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Projects/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProjectID,Name,Description,CreatedBy")] Project project)
@@ -75,7 +51,49 @@ namespace TaskManager2017.Controllers
             return View(project);
         }
 
-        // GET: Projects/Edit/5
+        public IActionResult ViewProjects()
+        {
+            ViewProjectsViewModel viewProjectsViewModel = new ViewProjectsViewModel();
+            string cookie = HttpContext.Request.Cookies["userCookie"];
+            int userID = Convert.ToInt32(cookie);
+            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+
+            string cookieP = HttpContext.Request.Cookies["projectCookie"];
+            int projectID = Convert.ToInt32(cookie);
+            var project = _context.Project.FirstOrDefault(u => u.ProjectID == projectID);
+
+            List<Project> projects = _context.Project.ToList();
+            List<TaskManager.Models.Task> tasks = _context.Task.ToList();
+
+
+            List<Project> userProjects = new List<Project>();
+            foreach (Project p in projects)
+            {
+                if (p.CreatedBy == user.Username)
+                {
+                    userProjects.Add(p);
+                }
+            }
+
+            viewProjectsViewModel.userProjects = userProjects;
+            viewProjectsViewModel.allTasks = tasks;
+            return View(viewProjectsViewModel);
+        }
+
+        public IActionResult TeamProjects(FindTasksViewModel findTasksViewModel)
+        {
+            TeamProjectsViewModel teamProjectsViewModel = new TeamProjectsViewModel();
+            TeamData teamData = new TeamData();
+            Team selectedTeam = teamData.FindByName(findTasksViewModel.TeamName);
+            teamProjectsViewModel.Team = selectedTeam;
+            foreach (Project project in selectedTeam.TeamProjects)
+            {
+                teamProjectsViewModel.AllProjects.Add(project);
+            }
+            return View(teamProjectsViewModel);
+        }
+
+        /*// GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -124,10 +142,10 @@ namespace TaskManager2017.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(project);
-        }
+        }*/
 
         // GET: Projects/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        /*public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -158,6 +176,6 @@ namespace TaskManager2017.Controllers
         private bool ProjectExists(int id)
         {
             return _context.Project.Any(e => e.ProjectID == id);
-        }
+        }*/
     }
 }
