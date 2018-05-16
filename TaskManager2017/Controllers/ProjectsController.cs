@@ -24,13 +24,33 @@ namespace TaskManager2017.Controllers
         
         public IActionResult Create()
         {
+            string cookie = HttpContext.Request.Cookies["userCookie"];
+            int userID = Convert.ToInt32(cookie);
+            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+            CreateProjectViewModel createProjectViewModel = new CreateProjectViewModel();
+            IQueryable<Team> custQuery =
+                from t in _context.Team
+                where t.CreatedBy == user.Username
+                select t;
+            List<SelectListItem> dropTeams = new List<SelectListItem>();
+            //dropTeams.Add(new SelectListItem { Text = "Please select Team", Value = "" });
+            
+            foreach (Team team in custQuery)
+            {
+                dropTeams.Add(new SelectListItem { Text = team.Name, Value = team.Name });
+                
+            }
+            
+            ViewBag.TeamP = dropTeams;
+
+            
             return View();
         }
 
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectID,Name,Description,CreatedBy")] Project project)
+        public async Task<IActionResult> Create([Bind("ProjectID,Name,Description,CreatedBy,Team")] Project project, string TeamP)
         {
             var project_ = _context.Project.FirstOrDefault(u => u.Name == project.Name);
             if (ModelState.IsValid & project_ == null)
@@ -39,6 +59,7 @@ namespace TaskManager2017.Controllers
                 int userID = Convert.ToInt32(cookie);
                 var user = _context.User.FirstOrDefault(u => u.UserID == userID);
                 project.CreatedBy = user.Username;
+                project.TeamP = TeamP;
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 Response.Cookies.Append("projectCookie", project.ProjectID.ToString());
@@ -80,16 +101,20 @@ namespace TaskManager2017.Controllers
             return View(viewProjectsViewModel);
         }
 
-        public IActionResult TeamProjects(FindTasksViewModel findTasksViewModel)
+        public IActionResult TeamProjects(string Team)
         {
             TeamProjectsViewModel teamProjectsViewModel = new TeamProjectsViewModel();
-            TeamData teamData = new TeamData();
-            Team selectedTeam = teamData.FindByName(findTasksViewModel.TeamName);
+            var selectedTeam = _context.Team.FirstOrDefault(u => u.Name == Team);
             teamProjectsViewModel.Team = selectedTeam;
-            foreach (Project project in selectedTeam.TeamProjects)
+            IQueryable<Project> custQuery =
+                from p in _context.Project
+                where p.TeamP == Team
+                select p;
+            foreach (Project project in custQuery)
             {
                 teamProjectsViewModel.AllProjects.Add(project);
             }
+            
             return View(teamProjectsViewModel);
         }
 

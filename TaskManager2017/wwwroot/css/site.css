@@ -21,6 +21,10 @@
     width: 100%;
 }
 
+.navbar-default .navbar-brand {
+    color: #000;
+}
+
 /* QR code generator */
 #qrCode {
     margin: 15px;
@@ -33,3 +37,5 @@
         display: none;
     }
 }
+
+

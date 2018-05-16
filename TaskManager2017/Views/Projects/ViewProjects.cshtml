@@ -9,7 +9,7 @@
 
     @foreach (var task in Model.allTasks)
     {
-        if (task.ProjectID == project.ProjectID)
+        if (task.Project == project.Name)
         {
             <h4>@task.Name</h4>
             if (task.IsTaken)
@@ -34,7 +34,7 @@
             <h4>Completed: No</h4>
 
             }
-
+            <p>-------------------------------</p>
         <br />
         <br />
         <br />

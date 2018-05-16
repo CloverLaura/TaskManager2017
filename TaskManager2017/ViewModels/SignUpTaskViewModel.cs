@@ -36,21 +36,7 @@ namespace TaskManager.ViewModels
         [Compare("Password")]
         public string Verify { get; set; }
 
-        /*[Required (ErrorMessage = "You must select a team")]
-        [Display (Name = "Select your team(s):")]
-        public List<TeamS> Teams { get; set; }*/
-
         
-
-        TeamData teamData = new TeamData();
-
-        /*public SignUpTaskViewModel()
-        {
-            this.Teams = new List<TeamS>();
-
-            
-        }*/
-
         
        
 

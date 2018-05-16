@@ -1,7 +1,8 @@
 ﻿@model TaskManager.ViewModels.FindTasksViewModel
 
-@if (Model.User.UserTeams.Count() != 0)
+@if (Model.Teams.Count() != 0)
 {
+    <h5>Here you can browse through all projects, or a specific team, to find tasks you want to work on.</h5>
     <br />
     <h2>If you want to view your teams projects, select the team here</h2>
     <br />
@@ -9,7 +10,7 @@
     {
         <form>
             <div class="form-group">
-                @Html.DropDownListFor(m => m.TeamName, Model.Teams, new { @class = "form-control" })
+                @Html.DropDownList("Team", new SelectList(Model.Teams, "Value", "Text"), "-Select Team-")
             </div>
             <input type="submit" value="Select" />
         </form>

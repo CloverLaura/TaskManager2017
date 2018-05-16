@@ -15,9 +15,10 @@ namespace TaskManager.ViewModels
 
         public int TaskID { get; set; }
 
-        /*public Project Project { get; set; }
-
-        public String CreatedBy { get; set; }*/
+        public ViewTasksViewModel()
+        {
+            Tasks = new List<Models.Task>();
+        }
 
 
 

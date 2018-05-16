@@ -71,75 +71,12 @@ namespace TaskManager.Controllers
             }
             return View(signInViewModel);
         }
-            
-           
-        
-
-        /*[HttpGet]
-        public IActionResult SignUp()
-        {
-            SignUpTaskViewModel signUpTaskViewModel = new SignUpTaskViewModel();
-            return View(signUpTaskViewModel);
-        }
-
-
-        [HttpPost]
-        public IActionResult SignUp(SignUpTaskViewModel signUpTaskViewModel)
-        {
-            UserData userdata = new UserData();
-            if (!userdata.IsValidUsername(signUpTaskViewModel.Username))
-            {
-                ModelState.AddModelError("Username", "Username already taken");
-            }
-            List<User> users = userdata.AllUsersToList();
-            foreach(User u in users)
-            {
-                if(signUpTaskViewModel.Email == u.Email)
-                {
-                    ModelState.AddModelError("Email", "Email already registered");
-                    return View(signUpTaskViewModel);
-                }
-            }
-            if (ModelState.IsValid)
-            {
-
-            User newUser = new User
-            {
-                Username = signUpTaskViewModel.Username,
-                FirstName = signUpTaskViewModel.FirstName,
-                LastName = signUpTaskViewModel.LastName,
-                Email = signUpTaskViewModel.Email,
-                Password = signUpTaskViewModel.Password,
-            };
-
-            UserData userData = new UserData();
-            //ctx.Add(newUser);
-            //ctx.SaveChanges();
-            userData.Add(newUser);
-            User user = userData.GetByEmail(signUpTaskViewModel.Email);
-            Response.Cookies.Append("userCookie", user.UserID.ToString());
-
-            return RedirectToAction("Home", new { email = signUpTaskViewModel.Email });
-
-            }
-            return View(signUpTaskViewModel);
-            
-        }*/
-
-        
-
-       
-
-        
-
-        
 
         public IActionResult SignOut()
         {
-            //UserData userData = new UserData();
+            
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
-            //User user = userData.GetById(userID);
             var user = _context.User.FirstOrDefault(u => u.UserID == userID);
             user.LoggedOn = false;
             _context.SaveChangesAsync();

@@ -1,12 +1,15 @@
 ﻿@model TaskManager.ViewModels.JoinTeamViewModel
 
 <h2>Join a team</h2>
+<br />
+<h5>Joining a team will enable you to filter through all projects the creator of the team has made by selecting the team name in 'Find Tasks"</h5>
 
 
 <form method="post" action="JoinTeam">
     <div class="form-group">
-        @Html.DropDownListFor(m => m.Team, Model.Teams, new { @class = "form-control" })
+        @Html.DropDownList("Team", new SelectList(Model.Teams, "Value", "Text"), "-Select Team-")
     </div>
+    <span asp-validation-for="Team" class="text-danger"></span>
     <input type="submit" value="Select" />
 </form>
    

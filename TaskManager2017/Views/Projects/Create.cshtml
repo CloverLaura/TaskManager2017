@@ -7,6 +7,7 @@
 <h2>Create</h2>
 
 <h4>Project</h4>
+<h5>Create a new project with a unique name and description to start, if you want to make this a team project <br /> select the team name below.</h5>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -22,7 +23,11 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-     
+            <div class="form-group">
+               @Html.DropDownList("TeamP", new SelectList(ViewBag.TeamP, "Value", "Text"), "-Select Team-")
+                
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
@@ -30,9 +35,6 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

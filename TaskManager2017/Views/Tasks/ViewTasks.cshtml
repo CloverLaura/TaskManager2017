@@ -20,8 +20,6 @@
         <h4>Task: @task.Name</h4>
         <h4>For project: @task.Name.ToString()</h4>
         <h5>Created by: @task.CreatedBy</h5>
-
-        <br />
         <h6>@task.Description</h6>
         <br />
         <p>Have you completed this task?</p>
@@ -29,6 +27,9 @@
         <input type="hidden" value="@task.TaskID" name="TaskID"/>
         <input type="submit" value="Completed" id="@task.TaskID" />
         </form>
+        <br />
+        <p>------</p>
+        <br />
     }
 
 }

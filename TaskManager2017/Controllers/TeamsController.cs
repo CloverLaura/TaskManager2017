@@ -20,40 +20,13 @@ namespace TaskManager2017.Controllers
             _context = context;
         }
 
-        // GET: Teams
-
-        /*public async Task<IActionResult> Index()
-        {
-            return View(await _context.Team.ToListAsync());
-        }
-
-        // GET: Teams/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var team = await _context.Team
-                .SingleOrDefaultAsync(m => m.TeamID == id);
-            if (team == null)
-            {
-                return NotFound();
-            }
-
-            return View(team);
-        }*/
-
-        // GET: Teams/Create
+        
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Teams/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TeamID,Name,Description,CreatedBy")] Team team)
@@ -67,9 +40,7 @@ namespace TaskManager2017.Controllers
                 team.CreatedBy = user.Username;
                 _context.Add(team);
 
-                //string cookie = HttpContext.Request.Cookies["userCookie"];
-                //int userID = Convert.ToInt32(cookie);
-                //var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+               
                 UserTeam userTeam = new UserTeam();
                 userTeam.Team = team.Name;
                 userTeam.User = user.Username;
@@ -77,13 +48,29 @@ namespace TaskManager2017.Controllers
                 await _context.UserTeam.AddAsync(userTeam);
                 _context.SaveChanges();
                 return RedirectToAction("Home", "Users");
-                //await _context.SaveChangesAsync();
-                //return RedirectToAction("Create", "UserTeams", new { teamName = team.Name });
+                
             }
             if(team_ != null)
             {
                 ModelState.AddModelError("Name", "Your team name is already being used");
             }
+            return View(team);
+        }
+
+        public IActionResult Details(string id)
+        {
+            var team = _context.Team.FirstOrDefault(u => u.Name == id);
+
+            IQueryable<UserTeam> custQuery2 =
+               from t in _context.UserTeam
+               where t.Team == team.Name
+               select t;
+            List<UserTeam> usersInTeam = new List<UserTeam>();
+            foreach (UserTeam teamU in custQuery2)
+            {
+                usersInTeam.Add(teamU);
+            }
+            ViewBag.UsersInTeam = usersInTeam;
             return View(team);
         }
 
@@ -175,20 +162,17 @@ namespace TaskManager2017.Controllers
         [HttpGet]
         public IActionResult JoinTeam()
         {
-            //UserData userData = new UserData();
-            //TeamData teamData = new TeamData();
-            //List<Team> teams = teamData.TeamsToList();
+            
             List<Team> teams = _context.Team.ToList();
             List<UserTeam> userTeams = _context.UserTeam.ToList();
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
             var user = _context.User.FirstOrDefault(u => u.UserID == userID);
-            //User user = userData.GetById(userID);
             JoinTeamViewModel joinTeamViewModel = new JoinTeamViewModel();
             joinTeamViewModel.User = user;
 
             List<SelectListItem> dropTeams = new List<SelectListItem>();
-            dropTeams.Add(new SelectListItem { Text = "Please select Team", Value = "0" });
+            
 
             int value = 1;
             foreach (Team team in teams)
@@ -210,29 +194,26 @@ namespace TaskManager2017.Controllers
         }
 
         [HttpPost]
-        public IActionResult JoinTeam(JoinTeamViewModel joinTeamViewModel)
+        public IActionResult JoinTeam(JoinTeamViewModel joinTeamViewModel, string Team)
         {
-            //TeamData teamData = new TeamData();
-            //UserData userData = new UserData();
-            //Team selectedTeam = joinTeamViewModel.Team;
-            //User user = joinTeamViewModel.User;
-            string cookie = HttpContext.Request.Cookies["userCookie"];
-            int userID = Convert.ToInt32(cookie);
-            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
-            var team = _context.Team.FirstOrDefault(u => u.Name == joinTeamViewModel.Team);
-            //Team team = teamData.FindByName(joinTeamViewModel.Team);
-            //User user = userData.GetById(userID);
-            //team.UsersInTeam.Add(user);
-            //userData.AddTeam(user, joinTeamViewModel.Team);
-            UserTeam userTeam = new UserTeam();
-            userTeam.Team = team.Name;
-            userTeam.User = user.Username;
+            if (joinTeamViewModel.Team != "0")
+            {
+                string cookie = HttpContext.Request.Cookies["userCookie"];
+                int userID = Convert.ToInt32(cookie);
+                var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+                var team = _context.Team.FirstOrDefault(u => u.Name == Team);
 
-            _context.UserTeam.AddAsync(userTeam);
-            _context.SaveChanges();
-            return RedirectToAction("Home", "Users");
+                UserTeam userTeam = new UserTeam();
+                userTeam.Team = team.Name;
+                userTeam.User = user.Username;
 
-            //return RedirectToAction("Home", "Login", new { email = user.Email });
+                _context.UserTeam.AddAsync(userTeam);
+                _context.SaveChanges();
+                return RedirectToAction("Home", "Users");
+
+            }
+            ModelState.AddModelError("Team", "You must select a team");
+            return View(joinTeamViewModel);
         }
     }
 }

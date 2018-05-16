@@ -20,58 +20,30 @@ namespace TaskManager2017.Controllers
             _context = context;
         }
 
-        // GET: Users
-        /*public async Task<IActionResult> Index()
-        {
-            return View(await _context.User.ToListAsync());
-        }
-
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User
-                .SingleOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }*/
-
-        // GET: Users/Create
+        
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Username,FirstName,LastName,Password,Email,UserID,LoggedOn")] User user, string confirmPassword)
         {
-            /*var userC = from m in _context.User
-                        select m;
-            userC = userC.Where(s => s.Username == user.Username);
-            await userC.LoadAsync();*/
+            if(confirmPassword == null)
+            {
+                ModelState.AddModelError("ConfirmPassword", "You must verify your password");
+                return View(user);
+            }
+            
             var userC = _context.User.FirstOrDefault(u => u.Username == user.Username);
             if (userC != null)
             {
                 ModelState.AddModelError("Username", "Useranme already exsists");
                 return View(user);
             }
-            /*var userE =
-                _context.User
-                .Where(r => r.Email == user.Email);
-            userC = userC.Where(s => s.Email == user.Email);
-            await userC.LoadAsync();*/
+           
             var userE = _context.User.FirstOrDefault(u => u.Email == user.Email);
             if (userE != null)
             {
@@ -84,7 +56,7 @@ namespace TaskManager2017.Controllers
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 Response.Cookies.Append("userCookie", user.UserID.ToString());
-                //return RedirectToAction(nameof(Index));
+          
                 return RedirectToAction("Home", "Users");
             }
             
@@ -98,14 +70,78 @@ namespace TaskManager2017.Controllers
 
         public IActionResult Home()
         {
-            //UserData userData = new UserData();
+            
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
             var user = _context.User.FirstOrDefault(u => u.UserID == userID);
             user.LoggedOn = true;
             _context.SaveChangesAsync();
 
+            IQueryable<Team> custQuery =
+                from t in _context.Team
+                where t.CreatedBy == user.Username
+                select t;
+            List<Team> userCreatedTeams = new List<Team>();
+            foreach (Team team in custQuery)
+            {
+                userCreatedTeams.Add(team);
+            }
+            ViewBag.UserCreatedTeams = userCreatedTeams;
+
+            IQueryable<UserTeam> custQuery2 =
+                from t in _context.UserTeam
+                where t.User == user.Username
+                select t;
+            List<UserTeam> teamUserIn = new List<UserTeam>();
+            foreach (UserTeam teamU in custQuery2)
+            {
+                teamUserIn.Add(teamU);
+            }
+            ViewBag.TeamUserIn = teamUserIn;
+
+            IQueryable<Project> custQuery3 =
+                from t in _context.Project
+                where t.CreatedBy == user.Username
+                select t;
+            List<Project> userProjects = new List<Project>();
+            int projectCount = 0;
+            foreach (Project project in custQuery3)
+            {
+                userProjects.Add(project);
+                projectCount++;
+            }
+            ViewBag.ProjectCount = projectCount;
+            ViewBag.UserProjects = userProjects;
+
+            IQueryable<TaskManager.Models.Task> custQuery4 =
+                from t in _context.Task
+                where t.TakenBy == user.Username
+                select t;
+
+            List<TaskManager.Models.Task> userTasks = new List<TaskManager.Models.Task>();
+            int completedTask = 0;
+            int uncompletedTask = 0;
+            foreach (TaskManager.Models.Task task in custQuery4)
+            {
+                userTasks.Add(task);
+                if(task.Completed == true)
+                {
+                    completedTask++;
+                }
+                else
+                {
+                    uncompletedTask++;
+                }
+            }
+            ViewBag.UserTasks = userTasks;
+            ViewBag.CompletedTasks = completedTask;
+            ViewBag.UncompletedTasks = uncompletedTask;
+
             return View(user);
+
+            
+
+            
         }
 
         public IActionResult SearchForUser()
@@ -118,9 +154,8 @@ namespace TaskManager2017.Controllers
         {
             if (ModelState.IsValid)
             {
-                //UserData userData = new UserData();
+                
                 List<User> users = _context.User.ToList();
-                //List<User> users = userData.AllUsersToList();
                 foreach (User u in users)
                 {
                     if (u.Username == searchForUserViewModel.Username)
@@ -137,9 +172,42 @@ namespace TaskManager2017.Controllers
 
         public IActionResult ViewSearchedUser(int id)
         {
-            //UserData userData = new UserData();
-            //User user = userData.GetById(id);
+            
             var user = _context.User.FirstOrDefault(u => u.UserID == id);
+
+            IQueryable<Project> custQuery =
+                from t in _context.Project
+                where t.CreatedBy == user.Username
+                select t;
+            List<Project> userProjects = new List<Project>();
+            foreach(var project in custQuery)
+            {
+                userProjects.Add(project);
+            }
+            ViewBag.UserProjects = userProjects;
+
+            IQueryable<TaskManager.Models.Task> custQuery2 =
+                from t in _context.Task
+                where t.TakenBy == user.Username
+                select t;
+            List<TaskManager.Models.Task> userTasks = new List<TaskManager.Models.Task>();
+            foreach (var task in custQuery2)
+            {
+                userTasks.Add(task);
+            }
+            ViewBag.UserTasks = userTasks;
+
+            IQueryable<UserTeam> custQuery3 =
+                from t in _context.UserTeam
+                where t.User == user.Username
+                select t;
+            List<UserTeam> userTeam = new List<UserTeam>();
+            foreach (var team in custQuery3)
+            {
+                userTeam.Add(team);
+            }
+            ViewBag.Userteams = userTeam;
+
             return View(user);
         }
 

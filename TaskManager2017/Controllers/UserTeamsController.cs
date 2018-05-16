@@ -11,36 +11,13 @@ namespace TaskManager2017.Controllers
 {
     public class UserTeamsController : Controller
     {
-        private readonly TaskManager2017Context _context;
+        /*private readonly TaskManager2017Context _context;
 
         public UserTeamsController(TaskManager2017Context context)
         {
             _context = context;
         }
 
-        // GET: UserTeams
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.UserTeam.ToListAsync());
-        }
-
-        // GET: UserTeams/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var userTeam = await _context.UserTeam
-                .SingleOrDefaultAsync(m => m.UserTeamID == id);
-            if (userTeam == null)
-            {
-                return NotFound();
-            }
-
-            return View(userTeam);
-        }
 
         // GET: UserTeams/Create
         public IActionResult Create(string teamName)
@@ -147,6 +124,6 @@ namespace TaskManager2017.Controllers
         private bool UserTeamExists(int id)
         {
             return _context.UserTeam.Any(e => e.UserTeamID == id);
-        }
+        }*/
     }
 }

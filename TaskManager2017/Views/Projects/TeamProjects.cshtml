@@ -5,8 +5,8 @@
 
 @foreach (var project in Model.AllProjects)
 {
-    <h1>Title: <a asp-controller="Task" asp-action="FindTasks_ViewTasks" asp-route-id="@project.ProjectID">@project.Name</a></h1>
-    <h2> Tasks: @project.Tasks.Count</h2>
+    <h1>Title: <a asp-controller="Tasks" asp-action="FindTasks_ViewTasks" asp-route-id="@project.ProjectID">@project.Name</a></h1>
+    <h2> Tasks: @project.TaskCount</h2>
 
 
 }

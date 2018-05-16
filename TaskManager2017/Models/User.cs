@@ -10,10 +10,10 @@ namespace TaskManager.Models
 {
     public class User
     {
-        [Required]
+        [Required (ErrorMessage ="You must enter a username")]
         public string Username { get; set; }
 
-        [Required]
+        [Required (ErrorMessage ="You must enter an email address")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
@@ -23,11 +23,12 @@ namespace TaskManager.Models
         [Required]
         public string LastName { get; set; }
 
-        [Required]
+        [Required (ErrorMessage= "You must enter a password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [NotMapped]
+        //[Required (ErrorMessage ="You must verify your password")]
         [DataType(DataType.Password)]
         [Display(Name ="Verify Password")]
         public string ConfirmPassword { get; set; }

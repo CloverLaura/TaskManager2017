@@ -4,47 +4,70 @@
 <h9>Profile</h9>
 <br />
 <br />
-<h5>User:@Model.Username</h5>
+<h4>User:@Model.Username</h4>
 
-<h4><p>Name: @Model.FirstName @Model.LastName<br />Email: @Model.Email</p></h4>
+<h5>Name: @Model.FirstName @Model.LastName<br />Email: @Model.Email</h5>
 <br />
 @if (Model.LoggedOn)
 {
-    <h4><p style="color:limegreen">Online</p></h4>
+    <h4 style="color:limegreen">Online</h4>
 
 }
 else
 {
-    <h4><p style="color:red">Offline</p></h4>
+    <h4 style="color:red">Offline</h4>
 
 }
-
-@if (Model.UserTeams.Count() != 0)
-{
-
-    <h5>Users Teams</h5>
-    foreach(var team in Model.UserTeams)
-    {
-        <p>@team.Name</p><br />
-        <p>@team.Description</p>
-
-    }
-
-}
-
-
-<h5>Users Projects</h5>
 <br />
-@foreach(var project in Model.UserProjects)
+@if (ViewBag.UserProjects.Count != 0)
 {
-    <h4><p>-@project.Name</p></h4>
-    <br/>
-    if (!string.IsNullOrEmpty(project.Description))
+
+    <h3>@Model.Username's Projects</h3>
+    foreach (var project in ViewBag.UserProjects)
     {
-        <p><h2>About: @project.Description</h2></p>
+        <p>Project Name: @project.Name</p><br />
+        <p>Project Description: @project.Description</p>
+        <p>----</p>
+    }
+
+}
+
+
+
+
+<br />
+@if (ViewBag.UserTasks.Count != 0)
+{
+    <h4>@Model.Username's Tasks</h4>
+    @foreach(var task in ViewBag.UserTasks)
+    {
+        <p>From Project: @task.Project</p>
+        <p>Created By: @task.CreatedBy</p>
+        <p>Task Name: @task.Name</p>
+        @if(task.Description != null)
+        {
+            <p>Task Description:@task.Description</p>
+
+        }
+        <p>----</p>
 
     }
 
 }
+<br />
+@if(ViewBag.UserTeams.Count != 0)
+{
+    <h5>Teams @Model.Username is in</h5>
+    @foreach(var team in ViewBag.UserTeams)
+    {
+        <p>@team.Team</p>
+        <p>----</p>
+
+    }
+
+}
+
+
+
 
 

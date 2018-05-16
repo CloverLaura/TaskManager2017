@@ -4,33 +4,26 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Model.Name Details</h2>
 
-<div>
-    <h4>Team</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.TeamID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+@if(Model.Description != null)
+{
+    <h5>Team description: @Model.Description</h5>
+
+
+}
+else
+{
+    <h5>Team description: None</h5>
+
+}
+<br />
+<br />
+<h2>Users in @Model.Name</h2>
+<br />
+
+@foreach(var user in ViewBag.UsersInTeam)
+{
+    <p>@user.User</p>
+
+}
