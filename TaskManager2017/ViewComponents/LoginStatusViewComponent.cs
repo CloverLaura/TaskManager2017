@@ -23,7 +23,7 @@ namespace TaskManager2017.ViewComponents
             //UserData userData = new UserData();
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
-            var user = _context.User.FirstOrDefault(m => m.UserID == userID);
+            var user = await _context.User.FirstOrDefaultAsync(m => m.UserID == userID);
             //User user = userData.GetById(userID);
 
 

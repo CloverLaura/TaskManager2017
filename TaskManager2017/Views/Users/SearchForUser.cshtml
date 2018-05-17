@@ -1,12 +1,18 @@
 ﻿@model TaskManager.ViewModels.SearchForUserViewModel
 
-<h2>Search for user by Username</h2>
-
-<form method="post" action="SearchForUser">
-    <div class="form-group">
-        <label asp-for="Username"></label>
-        <input class="form-control" asp-for="Username" />
-        <span style="color:red" asp-validation-for="Username"></span>
+<div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card-header"><h2>Search for user by Username</h2></div>
+    <div class="card-body">
+        <form method="post" action="SearchForUser">
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input class="form-control" asp-for="Username" />
+                <span style="color:red" asp-validation-for="Username"></span>
+            </div>
+            <input type="submit" value="Search" />
+        </form>
     </div>
-    <input type="submit" value="Search" />
-</form>
+</div>
+    
+
+    

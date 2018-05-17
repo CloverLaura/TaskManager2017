@@ -68,6 +68,25 @@ namespace TaskManager2017.Controllers
             if(project_ != null)
             {
                 ModelState.AddModelError("Name", "Your project name has already been taken");
+
+                string cookie = HttpContext.Request.Cookies["userCookie"];
+                int userID = Convert.ToInt32(cookie);
+                var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+                CreateProjectViewModel createProjectViewModel = new CreateProjectViewModel();
+                IQueryable<Team> custQuery =
+                    from t in _context.Team
+                    where t.CreatedBy == user.Username
+                    select t;
+                List<SelectListItem> dropTeams = new List<SelectListItem>();
+                //dropTeams.Add(new SelectListItem { Text = "Please select Team", Value = "" });
+
+                foreach (Team team in custQuery)
+                {
+                    dropTeams.Add(new SelectListItem { Text = team.Name, Value = team.Name });
+
+                }
+
+                ViewBag.TeamP = dropTeams;
             }
             return View(project);
         }
@@ -103,6 +122,10 @@ namespace TaskManager2017.Controllers
 
         public IActionResult TeamProjects(string Team)
         {
+            if (String.IsNullOrEmpty(Team))
+            {
+                return RedirectToAction("FindTasks", "Tasks");
+            }
             TeamProjectsViewModel teamProjectsViewModel = new TeamProjectsViewModel();
             var selectedTeam = _context.Team.FirstOrDefault(u => u.Name == Team);
             teamProjectsViewModel.Team = selectedTeam;

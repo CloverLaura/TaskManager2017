@@ -1,33 +1,39 @@
 ﻿@model TaskManager.Models.User
 
 
-<h9>Profile</h9>
-<br />
-<br />
-<h4>User:@Model.Username</h4>
+<div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+    <div class="card-header"><h3>@Model.Username's Profile</h3></div>
+    <div class="card-body">
+        <h5>Username:@Model.Username</h5>
+        <h5>Name: @Model.FirstName @Model.LastName<br />Email: @Model.Email</h5>
+        @if (Model.LoggedOn)
+        {
+            <h4 style="color:limegreen">Online</h4>
 
-<h5>Name: @Model.FirstName @Model.LastName<br />Email: @Model.Email</h5>
-<br />
-@if (Model.LoggedOn)
-{
-    <h4 style="color:limegreen">Online</h4>
+        }
+        else
+        {
+            <h4 style="color:red">Offline</h4>
 
-}
-else
-{
-    <h4 style="color:red">Offline</h4>
+        }
+    </div>
+</div>
 
-}
 <br />
 @if (ViewBag.UserProjects.Count != 0)
 {
 
+
     <h3>@Model.Username's Projects</h3>
     foreach (var project in ViewBag.UserProjects)
     {
-        <p>Project Name: @project.Name</p><br />
-        <p>Project Description: @project.Description</p>
-        <p>----</p>
+        <div class="card border-primary mb-3" style="max-width: 20rem;">
+            <div class="card-header"><h3>Project Name: @project.Name</h3></div>
+            <div class="card-body">
+                <h4>Project Description: @project.Description</h4>
+            </div>
+        </div>
+
     }
 
 }
@@ -39,31 +45,36 @@ else
 @if (ViewBag.UserTasks.Count != 0)
 {
     <h4>@Model.Username's Tasks</h4>
-    @foreach(var task in ViewBag.UserTasks)
+    @foreach (var task in ViewBag.UserTasks)
     {
-        <p>From Project: @task.Project</p>
-        <p>Created By: @task.CreatedBy</p>
-        <p>Task Name: @task.Name</p>
-        @if(task.Description != null)
-        {
-            <p>Task Description:@task.Description</p>
+        <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+            <div class="card-header"><h4>Task Name: @task.Name</h4></div>
+            <div class="card-body">
+                <h5>From Project: @task.Project</h5>
+                <h5>Created By: @task.CreatedBy</h5>
+                @if (task.Description != null)
+                {
+                    <p>Task Description:@task.Description</p>
 
-        }
-        <p>----</p>
-
+                }
+            </div>
+        </div>
     }
-
 }
 <br />
-@if(ViewBag.UserTeams.Count != 0)
+@if (ViewBag.UserTeams.Count != 0)
 {
-    <h5>Teams @Model.Username is in</h5>
-    @foreach(var team in ViewBag.UserTeams)
-    {
-        <p>@team.Team</p>
-        <p>----</p>
+    <div class="card text-black-50 bg-secondary mb-3" style="max-width: 20rem;">
+        <div class="card-header"><h4>Teams @Model.Username is in</h4></div>
+        <div class="card-body">
+            @foreach (var team in ViewBag.UserTeams)
+            {
+                <h5>-@team.Team</h5>
 
-    }
+            }
+        </div>
+    </div>
+    
 
 }
 

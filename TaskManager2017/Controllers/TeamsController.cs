@@ -196,11 +196,13 @@ namespace TaskManager2017.Controllers
         [HttpPost]
         public IActionResult JoinTeam(JoinTeamViewModel joinTeamViewModel, string Team)
         {
-            if (joinTeamViewModel.Team != "0")
+            string cookie = HttpContext.Request.Cookies["userCookie"];
+            int userID = Convert.ToInt32(cookie);
+            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+            
+            if (joinTeamViewModel.Team != null)
             {
-                string cookie = HttpContext.Request.Cookies["userCookie"];
-                int userID = Convert.ToInt32(cookie);
-                var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+
                 var team = _context.Team.FirstOrDefault(u => u.Name == Team);
 
                 UserTeam userTeam = new UserTeam();
@@ -213,6 +215,23 @@ namespace TaskManager2017.Controllers
 
             }
             ModelState.AddModelError("Team", "You must select a team");
+            List<Team> teams = _context.Team.ToList();
+            List<SelectListItem> dropTeams = new List<SelectListItem>();
+
+
+            int value = 1;
+            foreach (Team t in teams)
+            {
+                var userTeam = _context.UserTeam.FirstOrDefault(u => (u.User == user.Username) & (u.Team == t.Name));
+                if (userTeam == null)
+                {
+                    dropTeams.Add(new SelectListItem { Text = t.Name, Value = t.Name });
+                    value += 1;
+                }
+
+            }
+
+            joinTeamViewModel.Teams = dropTeams;
             return View(joinTeamViewModel);
         }
     }

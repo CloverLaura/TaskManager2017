@@ -31,20 +31,21 @@ namespace TaskManager2017.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Username,FirstName,LastName,Password,Email,UserID,LoggedOn")] User user, string confirmPassword)
         {
+            
             if(confirmPassword == null)
             {
                 ModelState.AddModelError("ConfirmPassword", "You must verify your password");
                 return View(user);
             }
             
-            var userC = _context.User.FirstOrDefault(u => u.Username == user.Username);
+            var userC = await _context.User.FirstOrDefaultAsync(u => u.Username == user.Username);
             if (userC != null)
             {
                 ModelState.AddModelError("Username", "Useranme already exsists");
                 return View(user);
             }
            
-            var userE = _context.User.FirstOrDefault(u => u.Email == user.Email);
+            var userE = await _context.User.FirstOrDefaultAsync(u => u.Email == user.Email);
             if (userE != null)
             {
                 ModelState.AddModelError("Email", "Email already registered");
@@ -68,16 +69,16 @@ namespace TaskManager2017.Controllers
             return View(user);
         }
 
-        public IActionResult Home()
+        public async Task<IActionResult> Home()
         {
             
             string cookie = HttpContext.Request.Cookies["userCookie"];
-            int userID = Convert.ToInt32(cookie);
-            var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+            int userID = Convert.ToInt32(cookie); 
+            var user =_context.User.FirstOrDefault( u => u.UserID == userID);
             user.LoggedOn = true;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            IQueryable<Team> custQuery =
+            IQueryable<Team> custQuery = 
                 from t in _context.Team
                 where t.CreatedBy == user.Username
                 select t;

@@ -145,9 +145,17 @@ namespace TaskManager2017.Controllers
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
             var user = _context.User.FirstOrDefault(u => u.UserID == userID);
-            List<TaskManager.Models.Task> tasks = _context.Task.ToList();
+            List<TaskManager.Models.Task> tasks = new List<TaskManager.Models.Task>();
             ViewTasksViewModel viewTasksViewModel = new ViewTasksViewModel();
             viewTasksViewModel.User = user;
+            IQueryable<TaskManager.Models.Task> custQuery =
+                from t in _context.Task
+                where t.TakenBy == user.Username
+                select t;
+            foreach(var task in custQuery)
+            {
+                tasks.Add(task);
+            }
             viewTasksViewModel.Tasks = tasks;
 
             return View(viewTasksViewModel);

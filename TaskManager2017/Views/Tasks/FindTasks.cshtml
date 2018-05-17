@@ -1,36 +1,54 @@
 ﻿@model TaskManager.ViewModels.FindTasksViewModel
 
+<div class="alert alert-dismissible alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h5>Here you can browse through all projects, or a specific team, to find tasks you want to work on.</h5>
+</div>
+
 @if (Model.Teams.Count() != 0)
 {
-    <h5>Here you can browse through all projects, or a specific team, to find tasks you want to work on.</h5>
+
+
     <br />
-    <h2>If you want to view your teams projects, select the team here</h2>
+    <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+        <div class="card-header"><h4>If you want to view your teams projects, select the team here</h4></div>
+        <div class="card-body">
+            @using (Html.BeginForm("TeamProjects", "Projects", FormMethod.Post))
+            {
+                <form>
+                    <div class="form-group">
+                        @Html.DropDownList("Team", new SelectList(Model.Teams, "Value", "Text"), "-Select Team-")
+                    </div>
+                    <input type="submit" value="Select" />
+                </form>
+
+            }
+        </div>
+    </div>
+}
     <br />
-    @using (Html.BeginForm("TeamProjects", "Projects", FormMethod.Post))
+
+    <h3>All Projects</h3>
+    <br />
+
+
+    @foreach (var project in Model.AllProjects)
     {
-        <form>
-            <div class="form-group">
-                @Html.DropDownList("Team", new SelectList(Model.Teams, "Value", "Text"), "-Select Team-")
+        <div class="card border-primary mb-3" style="max-width: 20rem;">
+            <div class="card-header"><h4>Title: <a asp-controller="Tasks" asp-action="FindTasks_ViewTasks" asp-route-id="@project.ProjectID">@project.Name</a></h4></div>
+            <div class="card-body">
+                <h4>Created by: @project.CreatedBy.ToString()</h4>
+                <h2> Tasks: @project.TaskCount.ToString()</h2>
             </div>
-            <input type="submit" value="Select" />
-        </form>
+        </div>
+            
+     }
+
+
+
+
+    @if (Model.AllProjects.Count == 0)
+    {
+        <h1>No projects to display</h1>
+
     }
-}
-<h1>All Projects</h1>
-
-@foreach (var project in Model.AllProjects)
-{
-    <h1>Title: <a asp-controller="Tasks" asp-action="FindTasks_ViewTasks" asp-route-id="@project.ProjectID">@project.Name</a></h1>
-    <h4>Created by: @project.CreatedBy.ToString()</h4>
-    <h2> Tasks: @project.TaskCount.ToString()</h2>
-
-}
-
-
-
-
-@if (Model.AllProjects.Count == 0)
-{
-    <h1>No projects to display</h1>
-
-}

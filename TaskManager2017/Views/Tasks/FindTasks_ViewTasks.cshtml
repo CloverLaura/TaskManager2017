@@ -3,41 +3,46 @@
 <h1>Tasks for @Model.Project.Name</h1>
 <br />
 <br />
-<h5>If you would like to grab a task, click the corresponding 'accept' button.</h5>
+<div class="alert alert-dismissible alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h5>If you would like to grab a task, click the corresponding 'accept' button.</h5>
+</div>
+
 <br />
 
-@foreach(var task in Model.Tasks)
+@foreach (var task in Model.Tasks)
 {
-    <h1>@task.Name</h1>
-    <h2>@task.Description</h2>
+    <div class="card border-primary mb-3" style="max-width: 20rem;">
+        <div class="card-header"><h4>Task Name: @task.Name </h4></div>
+        <div class="card-body">
+            <h5>@task.Description</h5>
+            @if (task.Completed == false)
+            {
+                <h2>Completed: No </h2>
 
-    @if(task.Completed == false)
-    {
-        <h2>Completed: No </h2>
-        
-    }
-    else
-    {
-        <h2>Completed: Yes</h2>
+            }
+            else
+            {
+                <h2>Completed: Yes</h2>
 
-    }
+            }
+            @if (task.IsTaken == false)
+            {
+                <h2>Taken: No</h2>
+                <br />
+                <form method="post" action="FindTasks_ViewTasks">
+                    <h2>Would you like to accept this task?</h2>
+                    @Html.Hidden("TaskID", task.TaskID)
+                    <input type="submit" value="Accept" />
+                </form>
 
-    @if(task.IsTaken == false)
-    {
-        <h2>Taken: No</h2>
-        <br />
+            }
+            else
+            {
+                <h2>Taken: Yes</h2>
 
-        <form method="post" action="FindTasks_ViewTasks">
-            <h2>Would you like to accept this task?</h2>
-            @Html.Hidden("TaskID", task.TaskID)
-            <input type="submit" value="Accept" />
-        </form>
-
-    }
-    else
-    {
-        <h2>Taken: Yes</h2>
-
-    }
-    
+            }
+        </div>
+    </div>
 }
+    

@@ -13,7 +13,7 @@ namespace TaskManager.ViewModels
 
         public User User { get; set; }
 
-        [Required]
+        [Required (ErrorMessage ="You must select a team to join")]
         [Display(Name ="Select the team you want to join")]
         public string Team { get; set; }
 

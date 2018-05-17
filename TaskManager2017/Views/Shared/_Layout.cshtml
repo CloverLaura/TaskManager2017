@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - TaskManager2017</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-lumen.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
@@ -15,12 +15,19 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+
+    <style>
+        body {
+            background-image: url("../../wwwroot/images/1010.jpg");
+        }
+    </style>
 </head>
-<body>
+<body style="background-image:url(../../wwwroot/images/1010.jpg);">
    
     @await Component.InvokeAsync("LoginStatus")
 
     <div class="container body-content">
+        <br />
         <h1>Task Manager</h1>
         @RenderBody()
         <hr />

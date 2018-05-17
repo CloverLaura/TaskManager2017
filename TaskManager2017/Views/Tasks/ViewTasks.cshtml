@@ -2,35 +2,34 @@
 
 <br />
 <br />
-<h3>This are the tasks you have selected from different projects</h3>
+<div class="alert alert-dismissible alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h3>These are the tasks you have selected from different projects</h3>
+</div>
 <br />
 <br />
 <br />
-@if(Model.Tasks.Count == 0)
+@if (Model.Tasks.Count == 0)
 {
     <h4>No tasks to display</h4>
 
 }
 
-@foreach(var task in Model.Tasks)
+@foreach (var task in Model.Tasks)
 {
-    if (task.TakenBy == Model.User.Username)
-    {
-
-        <h4>Task: @task.Name</h4>
-        <h4>For project: @task.Name.ToString()</h4>
-        <h5>Created by: @task.CreatedBy</h5>
-        <h6>@task.Description</h6>
-        <br />
-        <p>Have you completed this task?</p>
-        <form method="post" action="ViewTasks">
-        <input type="hidden" value="@task.TaskID" name="TaskID"/>
-        <input type="submit" value="Completed" id="@task.TaskID" />
-        </form>
-        <br />
-        <p>------</p>
-        <br />
-    }
-
+    <div class="card border-primary mb-3" style="max-width: 20rem;">
+        <div class="card-header">Task Name: @task.Name</div>
+        <div class="card-body">
+            <h6>@task.Description</h6>
+            <h5>Created by: @task.CreatedBy</h5>
+            <h5>For project: @task.Name.ToString()</h5>
+            <br />
+            <p>Have you completed this task?</p>
+            <form method="post" action="ViewTasks">
+                <input type="hidden" value="@task.TaskID" name="TaskID" />
+                <input type="submit" value="Completed" id="@task.TaskID" />
+            </form>
+        </div>
+    </div>
 }
 

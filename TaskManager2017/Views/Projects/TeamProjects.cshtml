@@ -1,20 +1,25 @@
 ﻿@model TaskManager.ViewModels.TeamProjectsViewModel
 
-
+<br />
 <h1>All Projects for team @Model.Team.Name</h1>
 
 @foreach (var project in Model.AllProjects)
 {
-    <h1>Title: <a asp-controller="Tasks" asp-action="FindTasks_ViewTasks" asp-route-id="@project.ProjectID">@project.Name</a></h1>
-    <h2> Tasks: @project.TaskCount</h2>
-
+    <div class="card border-primary mb-3" style="max-width: 20rem;">
+        <div class="card-header"><h4>Project Title: <a asp-controller="Tasks" asp-action="FindTasks_ViewTasks" asp-route-id="@project.ProjectID">@project.Name</a></h4></div>
+        <div class="card-body">
+            <h5> Tasks: @project.TaskCount</h5>
+        </div>
+    </div>
 
 }
-
 @if (Model.AllProjects.Count == 0)
 {
-    <h1>No projects to display</h1>
-
+    <div class="alert alert-dismissible alert-primary">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h1>No projects to display</h1>
+    </div>
+    
 }
 
 

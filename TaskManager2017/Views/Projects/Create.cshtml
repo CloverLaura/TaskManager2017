@@ -1,15 +1,57 @@
 ﻿@model TaskManager.Models.Project
 
-@{
-    ViewData["Title"] = "Create";
-}
+<br />
+<div class="alert alert-dismissible alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h5>Create a new project with a unique name and description to start, if you want to make this a team project <br /> select the team name below.</h5>
+</div>
 
-<h2>Create</h2>
-
-<h4>Project</h4>
-<h5>Create a new project with a unique name and description to start, if you want to make this a team project <br /> select the team name below.</h5>
+<h4>Create a new project</h4>
 <hr />
-<div class="row">
+<div class="card border-primary mb-3" style="max-width: 30rem;">
+    <div class="card-header" style="color:red;">Project name must be unique, description is required.</div>
+    <div class="card-body" style="margin: 0 auto; float:none; margin-bottom: 10px;">
+        <div class="row">
+            <div class="col-md-4" style="width: 700px;">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" style="width: 250px;" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control" style="width:250px; height:200px;"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="alert alert-dismissible alert-primary" style="width:500px; height:100px;">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <h5>
+                            If you want to make this a team project, select a<br />
+                            team below. If you are not in any teams, create or join<br />
+                            a team from the task bar.
+                        </h5>
+                    </div>
+                    <div>
+
+                    </div>
+                    <div class="form-group">
+                        @Html.DropDownList("TeamP", new SelectList(ViewBag.TeamP, "Value", "Text"), "-Select Team-")
+
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
+    </div>
+</div>
+
+<!--<div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -24,8 +66,8 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-               @Html.DropDownList("TeamP", new SelectList(ViewBag.TeamP, "Value", "Text"), "-Select Team-")
-                
+                @Html.DropDownList("TeamP", new SelectList(ViewBag.TeamP, "Value", "Text"), "-Select Team-")
+
             </div>
 
             <div class="form-group">
@@ -33,7 +75,7 @@
             </div>
         </form>
     </div>
-</div>
+</div>-->
 
 
 @section Scripts {

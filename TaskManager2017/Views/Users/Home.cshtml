@@ -4,75 +4,104 @@
 
 <br />
 <br />
-<h1>Welcome @Model.FirstName @Model.LastName</h1>
-<br />
-<br />
+<div class="alert alert-dismissible alert-success" style="height: 50px; width:50%;" >
+    <button type="button" class="close" data-dismiss="alert"  >&times;</button>
+    <h3><strong>Welcome @Model.FirstName @Model.LastName</strong></h3>
+</div>
 
-<p>
+<br />
+<br />
+<div class="jumbotron" style="width:500px; height:250px;">
+    <!--<h1 class="display-3">Hello, world!</h1>-->
+    <p class="lead">
+        Use the task bar to create projects and teams, or find a project to help with.<br />
+        You can also use the task bar to view your projects and tasks you have grabbed or search<br />
+        for a user.
+    </p>
+    <!--<hr class="my-4">
+    <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    </p>-->
+</div>
+<!--<p>
     Use the task bar to create projects and teams, or find a project to help with.<br />
     You can also use the task bar to view your projects and tasks you have grabbed or search<br />
     for a user.
-</p>
+</p>-->
 <br />
 <br />
-<h3>Teams you have created</h3>
+<div class="card text-black-50 bg-secondary mb-3" style="max-width: 20rem;">
+    <div class="card-header">Teams you have created</div>
+    <div class="card-body">
+        @if (ViewBag.UserCreatedTeams.Count != 0)
+        {
+            @foreach (var team in ViewBag.UserCreatedTeams)
+            {
+                <h5>Team Name: <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Name">@team.Name</a></h5>
 
-@if (ViewBag.UserCreatedTeams.Count != 0)
-{
-    
-    @foreach (var team in ViewBag.UserCreatedTeams)
-    {
-        <h5>Team Name: <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Name">@team.Name</a></h5>
+            }
 
-    }
+        }
+        else
+        {
+            <h5>You have not created any teams, click <a asp-controller="Teams" asp-action="Create">here</a> to create one</h5>
 
-}
-else
-{
-    <h5>You have not created any teams, click <a asp-controller="Teams" asp-action="Create">here</a> to create one</h5>
+        }
+        
+    </div>
+</div>
+<div class="card text-black-50 bg-secondary mb-3" style="max-width: 20rem;">
+    <div class="card-header">Teams you have joined</div>
+    <div class="card-body">
+        @if (ViewBag.TeamUserIn.Count != 0)
+        {
+            @foreach (var team in ViewBag.TeamUserIn)
+            {
+                <h5>Team Name: <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Team">@team.Team</a></h5>
 
-}
-<br />
-<h3>Teams you have joined</h3>
-@if (ViewBag.TeamUserIn.Count != 0)
-{
-    @foreach (var team in ViewBag.TeamUserIn)
-    {
+            }
 
-        <h5>Team Name: <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Team">@team.Team</a></h5>
+        }
+        else
+        {
+            <h5>You have not joined any teams, click <a asp-controller="Teams" asp-action="JoinTeam">here</a> to join one</h5>
 
-    }
+        }
+        
+    </div>
+</div>
+<div class="card text-black-50 bg-secondary mb-3" style="max-width: 20rem;">
+    <div class="card-header">Your Projects</div>
+    <div class="card-body">
+        @if (ViewBag.ProjectCount == 0)
+        {
+            <h5>You have not created any projects, click <a asp-controller="Projects" asp-action="Create">here</a> to create one</h5>
 
-}
-else
-{
-    <h5>You have not joined any teams, click <a asp-controller="Teams" asp-action="JoinTeam">here</a> to join one</h5>
+        }
+        else
+        {
+            <h5>You have created @ViewBag.ProjectCount projects, click <a asp-controller="Projects" asp-action="ViewProjects">here</a> to view them</h5>
 
-}
-<br />
-<h3>Projects</h3>
-@if (ViewBag.ProjectCount == 0)
-{
-    <h5>You have not created any projects, click <a asp-controller="Projects" asp-action="Create">here</a> to create one</h5>
+        }
+    </div>
+</div>
+<div class="card text-black-50 bg-secondary mb-3" style="max-width: 20rem;">
+    <div class="card-header">Your Tasks</div>
+    <div class="card-body">
+        @if (ViewBag.CompletedTasks == 0 & ViewBag.UncompletedTasks == 0)
+        {
+            <h5>You have not selected any tasks to complete, click <a asp-controller="Tasks" asp-action="FindTasks">here</a> to browse through projects</h5>
 
-}
-else
-{
-    <h5>You have created @ViewBag.ProjectCount projects, click <a asp-controller="Projects" asp-action="ViewProjects">here</a> to view them</h5>
+        }
+        else
+        {
+            <h5>You have @ViewBag.UncompletedTasks uncompleted tasks, click <a asp-controller="Tasks" asp-action="ViewTasks">here</a> to view them all</h5>
 
-}
-<br />
-<h3>Tasks</h3>
-@if (ViewBag.CompletedTasks == 0 & ViewBag.UncompletedTasks == 0)
-{
-<h5>You have not selected any tasks to complete, click <a asp-controller="Tasks" asp-action="FindTasks">here</a> to browse through projects</h5>
+        }
+    </div>
+</div>
 
-}
-else
-{
-<h5>You have @ViewBag.UncompletedTasks uncompleted tasks, click <a asp-controller="Tasks" asp-action="ViewTasks">here</a> to view them all</h5>
-
-}
 
 
 
