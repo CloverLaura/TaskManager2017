@@ -13,9 +13,9 @@ namespace TaskManager2017.Controllers
 {
     public class TasksController : Controller
     {
-        private readonly TaskManager2017Context _context;
+        private readonly TaskManager2017dbContext _context;
 
-        public TasksController(TaskManager2017Context context)
+        public TasksController(TaskManager2017dbContext context)
         {
             _context = context;
         }
@@ -42,8 +42,9 @@ namespace TaskManager2017.Controllers
                     task.Completed = false;
                     task.IsTaken = false;
                     task.TakenBy = "";
-                    task.CreatedBy = project.CreatedBy;
+                    task.CreatedByInt = project.CreatedByInt;
                     task.Project = project.Name;
+                    task.ProjectID = project.ProjectID;
                     project.TaskCount++;
                     _context.Add(task);
                     await _context.SaveChangesAsync();
@@ -56,8 +57,9 @@ namespace TaskManager2017.Controllers
                     task.Completed = false;
                     task.IsTaken = false;
                     task.TakenBy = "";
-                    task.CreatedBy = project.CreatedBy;
+                    task.CreatedByInt = project.CreatedByInt;
                     task.Project = project.Name;
+                    task.ProjectID = project.ProjectID;
                     project.TaskCount++;
                     _context.Add(task);
                     await _context.SaveChangesAsync();
@@ -85,23 +87,23 @@ namespace TaskManager2017.Controllers
 
             findTasksViewModel.User = user;
 
-            IQueryable<UserTeam> custQuery =
-                from t in _context.UserTeam
-                where t.User == user.Username
-                select t;
+            //IQueryable<UserTeam> custQuery =
+                //from t in _context.UserTeam
+                //where t.User == user.Username
+                //select t;
 
 
             List<SelectListItem> dropTeams = new List<SelectListItem>();
             //dropTeams.Add(new SelectListItem { Text = "Please select Team", Value = "0" });
 
-            int value = 1;
-            foreach (UserTeam u in custQuery)
-            {
-                dropTeams.Add(new SelectListItem { Text = u.Team, Value = u.Team });
-                value += 1;
-            }
+            //int value = 1;
+            //foreach (UserTeam u in custQuery)
+            //{
+                //dropTeams.Add(new SelectListItem { Text = u.Team, Value = u.Team });
+                //value += 1;
+            //}
 
-            findTasksViewModel.Teams = dropTeams;
+            //findTasksViewModel.Teams = dropTeams;
 
             return View(findTasksViewModel);
         }

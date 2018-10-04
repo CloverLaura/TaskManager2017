@@ -13,9 +13,9 @@ namespace TaskManager2017.Controllers
 {
     public class TeamsController : Controller
     {
-        private readonly TaskManager2017Context _context;
+        private readonly TaskManager2017dbContext _context;
 
-        public TeamsController(TaskManager2017Context context)
+        public TeamsController(TaskManager2017dbContext context)
         {
             _context = context;
         }
@@ -31,29 +31,18 @@ namespace TaskManager2017.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TeamID,Name,Description,CreatedBy")] Team team)
         {
-            var team_ = _context.Team.FirstOrDefault(u => u.Name == team.Name);
-            if (ModelState.IsValid & team_ == null)
+            
+            if (ModelState.IsValid)
             {
                 string cookie = HttpContext.Request.Cookies["userCookie"];
                 int userID = Convert.ToInt32(cookie);
                 var user = _context.User.FirstOrDefault(u => u.UserID == userID);
                 team.CreatedBy = user.Username;
                 _context.Add(team);
-
-               
-                UserTeam userTeam = new UserTeam();
-                userTeam.Team = team.Name;
-                userTeam.User = user.Username;
-
-                await _context.UserTeam.AddAsync(userTeam);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Home", "Users");
-                
             }
-            if(team_ != null)
-            {
-                ModelState.AddModelError("Name", "Your team name is already being used");
-            }
+         
             return View(team);
         }
 
@@ -61,16 +50,16 @@ namespace TaskManager2017.Controllers
         {
             var team = _context.Team.FirstOrDefault(u => u.Name == id);
 
-            IQueryable<UserTeam> custQuery2 =
-               from t in _context.UserTeam
-               where t.Team == team.Name
-               select t;
-            List<UserTeam> usersInTeam = new List<UserTeam>();
-            foreach (UserTeam teamU in custQuery2)
-            {
-                usersInTeam.Add(teamU);
-            }
-            ViewBag.UsersInTeam = usersInTeam;
+            //IQueryable<UserTeam> custQuery2 =
+               //from t in _context.UserTeam
+               //where t.Team == team.Name
+               //select t;
+            //List<UserTeam> usersInTeam = new List<UserTeam>();
+            //foreach (UserTeam teamU in custQuery2)
+            //{
+                //usersInTeam.Add(teamU);
+            //}
+            //ViewBag.UsersInTeam = usersInTeam;
             return View(team);
         }
 
@@ -164,7 +153,7 @@ namespace TaskManager2017.Controllers
         {
             
             List<Team> teams = _context.Team.ToList();
-            List<UserTeam> userTeams = _context.UserTeam.ToList();
+            //List<UserTeam> userTeams = _context.UserTeam.ToList();
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
             var user = _context.User.FirstOrDefault(u => u.UserID == userID);
@@ -177,8 +166,8 @@ namespace TaskManager2017.Controllers
             int value = 1;
             foreach (Team team in teams)
             {
-                var userTeam = _context.UserTeam.FirstOrDefault(u => (u.User == user.Username) & (u.Team == team.Name));
-                if (userTeam == null)
+                //var userTeam = _context.UserTeam.FirstOrDefault(u => (u.User == user.Username) & (u.Team == team.Name));
+                //if (userTeam == null)
                 {
                     dropTeams.Add(new SelectListItem { Text = team.Name, Value = team.Name });
                     value += 1;
@@ -193,8 +182,8 @@ namespace TaskManager2017.Controllers
             return View(joinTeamViewModel);
         }
 
-        [HttpPost]
-        public IActionResult JoinTeam(JoinTeamViewModel joinTeamViewModel, string Team)
+        
+        public async Task<IActionResult> JoinTeam(JoinTeamViewModel joinTeamViewModel, string Team)
         {
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
@@ -203,15 +192,21 @@ namespace TaskManager2017.Controllers
             if (joinTeamViewModel.Team != null)
             {
 
-                var team = _context.Team.FirstOrDefault(u => u.Name == Team);
+                var team = _context.Team.FirstOrDefault(t => t.Name == Team);
+                Team newTeamEntry = new Team
+                {
+                    Name = team.Name,
+                    Description = team.Description,
+                    CreatedBy = team.CreatedBy,
+                    UserID = user.UserID
+                };
+                await _context.AddAsync(newTeamEntry);
+                 _context.SaveChanges();
 
-                UserTeam userTeam = new UserTeam();
-                userTeam.Team = team.Name;
-                userTeam.User = user.Username;
 
-                _context.UserTeam.AddAsync(userTeam);
-                _context.SaveChanges();
-                return RedirectToAction("Home", "Users");
+
+
+                return View("Users","Home");
 
             }
             ModelState.AddModelError("Team", "You must select a team");
@@ -222,8 +217,8 @@ namespace TaskManager2017.Controllers
             int value = 1;
             foreach (Team t in teams)
             {
-                var userTeam = _context.UserTeam.FirstOrDefault(u => (u.User == user.Username) & (u.Team == t.Name));
-                if (userTeam == null)
+                //var userTeam = _context.UserTeam.FirstOrDefault(u => (u.User == user.Username) & (u.Team == t.Name));
+                //if (userTeam == null)
                 {
                     dropTeams.Add(new SelectListItem { Text = t.Name, Value = t.Name });
                     value += 1;

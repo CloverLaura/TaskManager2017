@@ -14,9 +14,9 @@ namespace TaskManager2017.Controllers
 {
     public class ProjectsController : Controller
     {
-        private readonly TaskManager2017Context _context;
+        private readonly TaskManager2017dbContext _context;
 
-        public ProjectsController(TaskManager2017Context context)
+        public ProjectsController(TaskManager2017dbContext context)
         {
             _context = context;
         }
@@ -34,10 +34,10 @@ namespace TaskManager2017.Controllers
                 select t;
             List<SelectListItem> dropTeams = new List<SelectListItem>();
             //dropTeams.Add(new SelectListItem { Text = "Please select Team", Value = "" });
-            
-            foreach (Team team in custQuery)
+            IEnumerable<string> custQueryN = custQuery.Select(t => t.Name).Distinct();
+            foreach (string team in custQueryN)
             {
-                dropTeams.Add(new SelectListItem { Text = team.Name, Value = team.Name });
+                dropTeams.Add(new SelectListItem { Text = team, Value = team });
                 
             }
             
@@ -58,7 +58,7 @@ namespace TaskManager2017.Controllers
                 string cookie = HttpContext.Request.Cookies["userCookie"];
                 int userID = Convert.ToInt32(cookie);
                 var user = _context.User.FirstOrDefault(u => u.UserID == userID);
-                project.CreatedBy = user.Username;
+                project.CreatedByInt = user.UserID;
                 project.TeamP = TeamP;
                 _context.Add(project);
                 await _context.SaveChangesAsync();
@@ -109,7 +109,7 @@ namespace TaskManager2017.Controllers
             List<Project> userProjects = new List<Project>();
             foreach (Project p in projects)
             {
-                if (p.CreatedBy == user.Username)
+                if (p.CreatedByInt == user.UserID)
                 {
                     userProjects.Add(p);
                 }

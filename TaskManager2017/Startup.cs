@@ -27,8 +27,8 @@ namespace TaskManager2017
             
             services.AddMvc();
 
-            services.AddDbContext<TaskManager2017Context>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("TaskManager2017Context")));
+            services.AddDbContext<TaskManager2017dbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("TaskManager2017dbContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

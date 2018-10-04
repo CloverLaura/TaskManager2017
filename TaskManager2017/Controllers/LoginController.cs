@@ -21,9 +21,9 @@ namespace TaskManager.Controllers
     public class LoginController : Controller
     {
 
-        private readonly TaskManager2017Context _context;
+        private readonly TaskManager2017dbContext _context;
 
-        public LoginController(TaskManager2017Context context)
+        public LoginController(TaskManager2017dbContext context)
         {
             _context = context;
         }

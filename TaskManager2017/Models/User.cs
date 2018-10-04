@@ -36,11 +36,11 @@ namespace TaskManager.Models
         public int UserID { get; set; }
 
         public bool LoggedOn { get; set; }
-
+        [NotMapped]
         public List<Team> UserTeams { get; private set; }
-
+        [NotMapped]
         public List<Project> UserProjects { get; private set; }
-
+        [NotMapped]
         public List<Task> UserTasks { get; private set; }
 
         public User()

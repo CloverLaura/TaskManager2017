@@ -11,9 +11,9 @@ namespace TaskManager2017.ViewComponents
 {
     public class LoginStatusViewComponent : ViewComponent
     {
-        private readonly TaskManager2017Context _context;
+        private readonly TaskManager2017dbContext _context;
 
-        public LoginStatusViewComponent(TaskManager2017Context context)
+        public LoginStatusViewComponent(TaskManager2017dbContext context)
         {
             _context = context;
         }

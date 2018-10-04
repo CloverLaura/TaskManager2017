@@ -48,6 +48,6 @@ namespace TaskManager2017.Models
 
         }*/
 
-        public DbSet<TaskManager2017.Models.UserTeam> UserTeam { get; set; }
+        //public DbSet<TaskManager2017.Models.UserTeam> UserTeam { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,11 +16,16 @@ namespace TaskManager.Models
 
         [Required (ErrorMessage ="You must enter a description for your project")]
         public string Description { get; set; }
-
+        [NotMapped]
         public string CreatedBy { get; set; }
-        public int TaskCount { get; set; }
-        public string TeamP { get; set; }
 
+        public int CreatedByInt { get; set; }
+
+        [NotMapped]
+        public int TaskCount { get; set; }
+        [NotMapped]
+        public string TeamP { get; set; }
+        [NotMapped]
         public List<Task> Tasks { get; set; }
 
         public Project()

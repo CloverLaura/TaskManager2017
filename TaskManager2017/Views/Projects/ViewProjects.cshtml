@@ -7,40 +7,50 @@
     <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
         <div class="card-header"><h3>@project.Name</h3></div>
         <div class="card-body">
-        <h5>@project.Description</h5>
-    @foreach (var task in Model.allTasks)
-    {
-        @if (task.Project == project.Name)
-        {
-            <div class="card border-info mb-3" style="max-width: 20rem; color:black;">
-                <div class="card-header">Task Name: @task.Name</div>
-                <div class="card-body">
-                    @if (task.IsTaken)
-                    {
-                        <h4>Taken: Yes</h4>
-                        <h4>Taken by: @task.TakenBy.ToString()</h4>
+            @if (project.Description != null)
+            {
+                <h5>Project overview: @project.Description</h5>
+            }
 
-                    }
-                    else
-                    {
-                        <h4>Taken: No</h4>
-                    }
+            @foreach (var task in Model.allTasks)
+            {
+                @if (task.ProjectID == project.ProjectID)
+                {
+                    <div class="card border-info mb-3" style="max-width: 20rem; color:black;">
+                        <div class="card-header">Task Name: @task.Name</div>
+                        <div class="card-body">
+                            @if (task.Description != null)
+                            {
+                                <h5>Task info: @task.Description</h5>
+                            }
 
-                    @if (task.Completed)
-                    {
-                        <h4>Completed: Yes</h4>
+                            @if (task.IsTaken)
+                            {
+                                <h4>Taken: Yes</h4>
+                                <h4>Taken by: @task.TakenBy.ToString()</h4>
 
-                    }
-                    else
-                    {
-                        <h4>Completed: No</h4>
+                            }
+                            else
+                            {
+                                <h4>Taken: No</h4>
+                            }
 
-                    }
-                </div>
-            </div>
-        }
+                            @if (task.Completed)
+                            {
+                                <h4>Completed: Yes</h4>
 
-    }   </div>
+                            }
+                            else
+                            {
+                                <h4>Completed: No</h4>
+
+                            }
+                        </div>
+                    </div>
+                }
+
+            }
+        </div>
     </div>
 
 }

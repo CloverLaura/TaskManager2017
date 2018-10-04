@@ -8,14 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using TaskManager.Models;
 using TaskManager.ViewModels;
 using TaskManager2017.Models;
+using TaskManager2017.ViewModels;
 
 namespace TaskManager2017.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly TaskManager2017Context _context;
+        private readonly TaskManager2017dbContext _context;
 
-        public UsersController(TaskManager2017Context context)
+        public UsersController(TaskManager2017dbContext context)
         {
             _context = context;
         }
@@ -54,7 +55,8 @@ namespace TaskManager2017.Controllers
 
             if (ModelState.IsValid & confirmPassword == user.Password)
             {
-                _context.Add(user);
+             
+                
                 await _context.SaveChangesAsync();
                 Response.Cookies.Append("userCookie", user.UserID.ToString());
           
@@ -71,74 +73,84 @@ namespace TaskManager2017.Controllers
 
         public async Task<IActionResult> Home()
         {
-            
+            HomeUsersViewModel homeUsersViewModel = new HomeUsersViewModel();
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie); 
             var user =_context.User.FirstOrDefault( u => u.UserID == userID);
+            homeUsersViewModel.FirstName = user.FirstName;
+            homeUsersViewModel.LastName = user.LastName;
             user.LoggedOn = true;
             await _context.SaveChangesAsync();
-
-            IQueryable<Team> custQuery = 
-                from t in _context.Team
-                where t.CreatedBy == user.Username
-                select t;
+            var custQuery = _context.Team.Where(t => t.CreatedBy == user.Username).ToList();
             List<Team> userCreatedTeams = new List<Team>();
-            foreach (Team team in custQuery)
+            if (custQuery != null)
             {
-                userCreatedTeams.Add(team);
+                foreach(Team t in custQuery)
+                {
+                    userCreatedTeams.Add(t);
+                }
+                
+                homeUsersViewModel.UserCreatedTeams = userCreatedTeams.Select(t => t.Name).Distinct();
             }
-            ViewBag.UserCreatedTeams = userCreatedTeams;
 
-            IQueryable<UserTeam> custQuery2 =
-                from t in _context.UserTeam
-                where t.User == user.Username
-                select t;
-            List<UserTeam> teamUserIn = new List<UserTeam>();
-            foreach (UserTeam teamU in custQuery2)
+
+            var custQuery2 = _context.Team.Where(t => t.UserID == user.UserID).ToList();
+            if (custQuery2 != null)
             {
-                teamUserIn.Add(teamU);
+                List<Team> teamsUserIn = new List<Team>();
+                foreach (Team t in custQuery2)
+                {
+                    teamsUserIn.Add(t);
+                }
+                homeUsersViewModel.TeamsUserIn = teamsUserIn;
             }
-            ViewBag.TeamUserIn = teamUserIn;
-
-            IQueryable<Project> custQuery3 =
+            IQueryable < Project > custQuery3 =
                 from t in _context.Project
                 where t.CreatedBy == user.Username
                 select t;
-            List<Project> userProjects = new List<Project>();
-            int projectCount = 0;
-            foreach (Project project in custQuery3)
+            if (custQuery3 != null)
             {
-                userProjects.Add(project);
-                projectCount++;
+                List<Project> userProjects = new List<Project>();
+                foreach (Project project in custQuery3)
+                {
+                    userProjects.Add(project);
+                }
+                homeUsersViewModel.UserProjects = userProjects;
             }
-            ViewBag.ProjectCount = projectCount;
-            ViewBag.UserProjects = userProjects;
+            
+            
 
             IQueryable<TaskManager.Models.Task> custQuery4 =
                 from t in _context.Task
                 where t.TakenBy == user.Username
                 select t;
 
-            List<TaskManager.Models.Task> userTasks = new List<TaskManager.Models.Task>();
-            int completedTask = 0;
-            int uncompletedTask = 0;
-            foreach (TaskManager.Models.Task task in custQuery4)
+            
+            if (custQuery4 != null)
             {
-                userTasks.Add(task);
-                if(task.Completed == true)
+                int completedTask = 0;
+                int uncompletedTask = 0;
+                List<TaskManager.Models.Task> userTasks = new List<TaskManager.Models.Task>();
+                foreach (TaskManager.Models.Task task in custQuery4)
                 {
-                    completedTask++;
+                    userTasks.Add(task);
+                    if (task.Completed == true)
+                    {
+                        completedTask++;
+                    }
+                    else
+                    {
+                        uncompletedTask++;
+                    }
                 }
-                else
-                {
-                    uncompletedTask++;
-                }
+                homeUsersViewModel.UserTasks = userTasks;
+                homeUsersViewModel.CompletedTasks = completedTask;
+                homeUsersViewModel.UncompletedTasks = uncompletedTask;
+                homeUsersViewModel.UserName = user.Username;
             }
-            ViewBag.UserTasks = userTasks;
-            ViewBag.CompletedTasks = completedTask;
-            ViewBag.UncompletedTasks = uncompletedTask;
+            
 
-            return View(user);
+            return View(homeUsersViewModel);
 
             
 
@@ -198,16 +210,16 @@ namespace TaskManager2017.Controllers
             }
             ViewBag.UserTasks = userTasks;
 
-            IQueryable<UserTeam> custQuery3 =
-                from t in _context.UserTeam
-                where t.User == user.Username
-                select t;
-            List<UserTeam> userTeam = new List<UserTeam>();
-            foreach (var team in custQuery3)
-            {
-                userTeam.Add(team);
-            }
-            ViewBag.Userteams = userTeam;
+            //IQueryable<UserTeam> custQuery3 =
+                //from t in _context.UserTeam
+                //where t.User == user.Username
+                //select t;
+            //List<UserTeam> userTeam = new List<UserTeam>();
+            //foreach (var team in custQuery3)
+            //{
+                //userTeam.Add(team);
+            //}
+            //ViewBag.Userteams = userTeam;
 
             return View(user);
         }
