@@ -72,16 +72,16 @@ namespace TaskManager.Controllers
             return View(signInViewModel);
         }
 
-        public IActionResult SignOut()
+        public async Task<IActionResult> SignOut()
         {
             
             string cookie = HttpContext.Request.Cookies["userCookie"];
             int userID = Convert.ToInt32(cookie);
             var user = _context.User.FirstOrDefault(u => u.UserID == userID);
             user.LoggedOn = false;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            return RedirectToAction("SignIn", "Login");
+            return RedirectToAction("SignIn");
         }
 
        
