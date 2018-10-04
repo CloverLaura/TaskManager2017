@@ -160,16 +160,17 @@ namespace TaskManager2017.Controllers
             JoinTeamViewModel joinTeamViewModel = new JoinTeamViewModel();
             joinTeamViewModel.User = user;
 
+            IEnumerable<string> teamNames = teams.Select(t => t.Name).Distinct();
             List<SelectListItem> dropTeams = new List<SelectListItem>();
             
 
             int value = 1;
-            foreach (Team team in teams)
+            foreach (String team in teamNames)
             {
                 //var userTeam = _context.UserTeam.FirstOrDefault(u => (u.User == user.Username) & (u.Team == team.Name));
                 //if (userTeam == null)
                 {
-                    dropTeams.Add(new SelectListItem { Text = team.Name, Value = team.Name });
+                    dropTeams.Add(new SelectListItem { Text = team, Value = team });
                     value += 1;
                 }
 

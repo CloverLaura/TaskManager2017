@@ -104,10 +104,8 @@ namespace TaskManager2017.Controllers
                 }
                 homeUsersViewModel.TeamsUserIn = teamsUserIn;
             }
-            IQueryable < Project > custQuery3 =
-                from t in _context.Project
-                where t.CreatedBy == user.Username
-                select t;
+            var custQuery3 = _context.Project.Where(p => p.CreatedByInt == user.UserID);
+
             if (custQuery3 != null)
             {
                 List<Project> userProjects = new List<Project>();
