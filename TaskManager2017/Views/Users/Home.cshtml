@@ -63,20 +63,17 @@
                 {
                     <h5>Team Name: <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Name">@team.Name</a></h5>
                 }
-                if (team.CreatedBy == Model.UserName)
-                {
-                    <h5>You have not joined any teams, click <a asp-controller="Teams" asp-action="JoinTeam">here</a> to join one</h5>
-                }
+                
 
 
             }
 
-        }
-        else
-        {
-            <h5>You have not joined any teams, click <a asp-controller="Teams" asp-action="JoinTeam">here</a> to join one</h5>
+         }
+         else
+         {
+             <h5>You have not joined any teams, click <a asp-controller="Teams" asp-action="JoinTeam">here</a> to join one</h5>
 
-        }
+         }
 
     </div>
 </div>

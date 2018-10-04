@@ -207,7 +207,7 @@ namespace TaskManager2017.Controllers
 
 
 
-                return View("Users","Home");
+                return RedirectToAction("Home","Users");
 
             }
             ModelState.AddModelError("Team", "You must select a team");
