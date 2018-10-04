@@ -75,10 +75,27 @@ namespace TaskManager2017.Controllers
             FindTasksViewModel findTasksViewModel = new FindTasksViewModel();
             List<Project> projects = _context.Project.ToList();
             List<TaskManager.Models.Task> tasks = _context.Task.ToList();
+            List<Tuple<string,int>> tasksInProject = new List<Tuple<string, int>>();
+            List<Tuple<string, string>> projectsCreatedBy = new List<Tuple<string, string>>();
+            foreach(Project project in projects)
+            {
+                int numTasks = 0;
+                foreach(TaskManager.Models.Task task in tasks)
+                {
+                    if(task.ProjectID == project.ProjectID)
+                    {
+                        numTasks++;
+                    }
+                }
+                Tuple<string,int> projectTasks = Tuple.Create(project.Name, numTasks);
+                tasksInProject.Add(projectTasks);
+            }
         
             foreach (Project project in projects)
             {
-                findTasksViewModel.AllProjects.Add(project);
+                User user_ = _context.User.FirstOrDefault(u => u.UserID == project.CreatedByInt);
+                Tuple<string, string> projectCreatedBy = Tuple.Create(project.Name, user_.Username);
+                projectsCreatedBy.Add(projectCreatedBy);
             }
             findTasksViewModel.AllTasks = tasks;
             string cookie = HttpContext.Request.Cookies["userCookie"];
@@ -99,12 +116,13 @@ namespace TaskManager2017.Controllers
             //int value = 1;
             //foreach (UserTeam u in custQuery)
             //{
-                //dropTeams.Add(new SelectListItem { Text = u.Team, Value = u.Team });
-                //value += 1;
+            //dropTeams.Add(new SelectListItem { Text = u.Team, Value = u.Team });
+            //value += 1;
             //}
 
             //findTasksViewModel.Teams = dropTeams;
-
+            findTasksViewModel.ProjectsCreatedBy = projectsCreatedBy;
+            findTasksViewModel.TasksInProject = tasksInProject;
             return View(findTasksViewModel);
         }
 

@@ -21,11 +21,18 @@ namespace TaskManager.ViewModels
 
         public int Counter { get; set; }
 
+        public List<Tuple<string, int>> TasksInProject { get; set; }
+
+        public List<Tuple<string, string>> ProjectsCreatedBy { get; set; }
+
         public FindTasksViewModel()
         {
             AllProjects = new List<Project>();
             AllTasks = new List<Models.Task>();
             Counter = 0;
+
+            //Dictionary<Project, int> TasksInProject = new Dictionary<Project, int>();
+            //Dictionary<Project, string> ProjectsCreatedBy = new Dictionary<Project, string>();
         }
     }
 
