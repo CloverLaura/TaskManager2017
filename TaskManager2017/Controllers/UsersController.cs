@@ -32,6 +32,11 @@ namespace TaskManager2017.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Username,FirstName,LastName,Password,Email,UserID,LoggedOn")] User user, string confirmPassword)
         {
+            User user_ = _context.User.FirstOrDefault(u => u.Username == user.Username);
+            if (user_ != null)
+            {
+                ModelState.AddModelError("UserName", "Username already taken");
+            }
             
             if(confirmPassword == null)
             {
@@ -55,8 +60,8 @@ namespace TaskManager2017.Controllers
 
             if (ModelState.IsValid & confirmPassword == user.Password)
             {
-             
-                
+
+                _context.User.Add(user);
                 await _context.SaveChangesAsync();
                 Response.Cookies.Append("userCookie", user.UserID.ToString());
           
@@ -81,7 +86,7 @@ namespace TaskManager2017.Controllers
             homeUsersViewModel.LastName = user.LastName;
             user.LoggedOn = true;
             await _context.SaveChangesAsync();
-            var custQuery = _context.Team.Where(t => t.CreatedBy == user.Username).ToList();
+            var custQuery = _context.Team.Where(t => t.CreatedBy == user.Username);
             List<Team> userCreatedTeams = new List<Team>();
             if (custQuery != null)
             {
@@ -94,7 +99,7 @@ namespace TaskManager2017.Controllers
             }
 
 
-            var custQuery2 = _context.Team.Where(t => t.UserID == user.UserID).ToList();
+            var custQuery2 = _context.Team.Where(t => t.UserID == user.UserID);
             if (custQuery2 != null)
             {
                 List<Team> teamsUserIn = new List<Team>();

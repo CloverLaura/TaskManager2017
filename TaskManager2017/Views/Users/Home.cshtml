@@ -34,7 +34,7 @@
 <div class="card text-black-50 bg-secondary mb-3" style="max-width: 20rem;">
     <div class="card-header">Teams you have created</div>
     <div class="card-body">
-        @if (Model.UserCreatedTeams != null)
+        @if (Model.UserCreatedTeams.Count() != 0)
         {
             @foreach (var team in Model.UserCreatedTeams)
             {
@@ -54,7 +54,7 @@
 <div class="card text-black-50 bg-secondary mb-3" style="max-width: 20rem;">
     <div class="card-header">Teams you have joined</div>
     <div class="card-body">
-        @if (Model.TeamsUserIn != null)
+        @if (Model.TeamsUserIn.Count() != 0)
         {
 
             @foreach (var team in Model.TeamsUserIn)
