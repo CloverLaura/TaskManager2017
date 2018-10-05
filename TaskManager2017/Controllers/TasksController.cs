@@ -127,11 +127,11 @@ namespace TaskManager2017.Controllers
         }
 
         [HttpGet]
-        public IActionResult FindTasks_ViewTasks(int id)
+        public IActionResult FindTasks_ViewTasks(string projectName)
         {
             
             FindTasks_ViewTasksViewModel findTasks_ViewTasksViewModel = new FindTasks_ViewTasksViewModel();
-            var project = _context.Project.FirstOrDefault(p => p.ProjectID == id);
+            var project = _context.Project.FirstOrDefault(p => p.Name == projectName);
             IQueryable<TaskManager.Models.Task> custQuery =
                 from t in _context.Task
                 where t.Project == project.Name

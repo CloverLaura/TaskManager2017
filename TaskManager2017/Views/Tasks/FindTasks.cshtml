@@ -35,7 +35,7 @@
     @for (int i = 0; i < Model.ProjectsCreatedBy.Count; i++)
     {
         <div class="card border-primary mb-3" style="max-width: 20rem;">
-            <div class="card-header"><h4>Title: <a asp-controller="Tasks" asp-action="FindTasks_ViewTasks" asp-route-id="@Model.ProjectsCreatedBy[i].Item1.ToString()"></a>@Model.ProjectsCreatedBy[i].Item1</h4></div>
+            <div class="card-header"><h4>Title: @Html.ActionLink(@Model.ProjectsCreatedBy[i].Item1, "FindTasks_ViewTasks", "Tasks", new { projectName = Model.ProjectsCreatedBy[i].Item1}, null)</h4></div>
             <div class="card-body">
                 <h4>Created by: @Model.ProjectsCreatedBy[i].Item2</h4>
                 @for (int x = 0; x < Model.TasksInProject.Count; x++)
