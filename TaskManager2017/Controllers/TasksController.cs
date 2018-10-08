@@ -145,7 +145,7 @@ namespace TaskManager2017.Controllers
         }
 
         [HttpPost]
-        public IActionResult FindTasks_ViewTasks(FindTasks_ViewTasksViewModel findTasks_ViewTasksViewModel)
+        public async Task<IActionResult> FindTasks_ViewTasks(FindTasks_ViewTasksViewModel findTasks_ViewTasksViewModel)
         {
             
             string cookie = HttpContext.Request.Cookies["userCookie"];
@@ -154,11 +154,29 @@ namespace TaskManager2017.Controllers
             var task = _context.Task.FirstOrDefault(t => t.TaskID == findTasks_ViewTasksViewModel.TaskID);
             task.IsTaken = true;
             task.TakenBy = user.Username;
-            _context.SaveChangesAsync();
-            return RedirectToAction("ViewTasks");
+            await _context.SaveChangesAsync();
+
+            //string cookie = HttpContext.Request.Cookies["userCookie"];
+            //int userID = Convert.ToInt32(cookie);
+            //var user = _context.User.FirstOrDefault(u => u.UserID == userID);
+            List<TaskManager.Models.Task> tasks = new List<TaskManager.Models.Task>();
+            ViewTasksViewModel viewTasksViewModel = new ViewTasksViewModel();
+            viewTasksViewModel.User = user;
+            IQueryable<TaskManager.Models.Task> custQuery =
+                from t in _context.Task
+                where t.TakenBy == user.Username
+                select t;
+            foreach (var taskX in custQuery)
+            {
+                tasks.Add(taskX);
+            }
+            viewTasksViewModel.Tasks = tasks;
+
+            
+            return View("ViewTasks", viewTasksViewModel);
         }
 
-        [HttpGet]
+        
         public IActionResult ViewTasks()
         {
             
